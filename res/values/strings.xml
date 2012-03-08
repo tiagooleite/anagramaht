@@ -9,5 +9,9 @@
     <string name="ajuda">Ajuda</string>
     <string name="sair">Sair</string>
     <string name="hello_app">Bem vindo ao Anagrama HT!</string>
+    <string name="sub_menu_jogar">Insira o nome do jogador</string>
+    <string name="confirmar">OK</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="limpar">Limpar</string>
 
 </resources>

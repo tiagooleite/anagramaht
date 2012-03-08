@@ -11,7 +11,7 @@
         android:text="@string/hello_app" />
     
     <ImageView
-        android:id="@+id/imageView1"
+        android:id="@+id/imageViewTelaPrincipal"
         android:contentDescription="@string/ajuda"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,7 +20,7 @@
         android:src="@drawable/tela_inicial" />
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/jogar"
         android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -28,28 +28,28 @@
         android:text="@string/jogar" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/ranking"
         android:layout_width="210dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/ranking" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/opcoes"
         android:layout_width="186dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/opcoes" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/ajuda"
         android:layout_width="166dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/ajuda" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/sair"
         android:layout_width="124dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
