@@ -16,11 +16,29 @@ public class AnagramaHTActivity extends Activity {
         setContentView(R.layout.main);
         
         botaoJogarAction();
-        
-        
+        botaoOpcoesAction();
         botaoAjudaAction();
         botaoSairAction();
     }
+
+
+	private void botaoOpcoesAction() {
+		Button botaoOpcoes = (Button) findViewById(R.id.opcoes);
+        botaoOpcoes.setOnClickListener(botaoOpcoesListener());
+		
+	}
+
+
+	private OnClickListener botaoOpcoesListener() {
+		return new OnClickListener() {
+
+			public void onClick(View v) {
+				Intent settingsButton = new Intent(AnagramaHTActivity.this,
+						OpcoesActivity.class);
+				startActivity(settingsButton);
+			}
+		};
+	}
 
 
 	private void botaoJogarAction() {
@@ -36,7 +54,6 @@ public class AnagramaHTActivity extends Activity {
 				Intent settingsButton = new Intent(AnagramaHTActivity.this,
 						SubMenuJogarActivity.class);
 				startActivity(settingsButton);
-
 			}
 		};
 	}
@@ -58,24 +75,18 @@ public class AnagramaHTActivity extends Activity {
 		return new OnClickListener() {
 			
 			public void onClick(View v) {
-				  Intent settingsButton = new Intent(AnagramaHTActivity.this, TesteActivity.class);
+				  Intent settingsButton = new Intent(AnagramaHTActivity.this,
+						  AjudaActivity.class);
                   startActivity(settingsButton);
-				
 			}
 		};
 	}
 	
-	public void onDestroy() {
-		super.onDestroy();
-		System.exit(0);
-	}
-
-
 	private OnClickListener botaoSairListener() {
-		return new OnClickListener() {
+		return new OnClickListener() { 
 			
 			public void onClick(View v) {
-				onDestroy();
+				finish();
 			}
 		};
 	}
