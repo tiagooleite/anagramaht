@@ -12,7 +12,7 @@ import android.os.Bundle;
 
 public class JogoActivity extends Activity {
 	
-	private Jogo jogoAtual;
+	private Jogo jogoAtual; 
 	
 	private List<List<String>> palavras;
 
