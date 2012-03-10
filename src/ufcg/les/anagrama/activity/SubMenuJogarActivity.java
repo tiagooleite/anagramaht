@@ -1,6 +1,7 @@
 package ufcg.les.anagrama.activity;
 
 import ufcg.les.anagrama.R;
+import ufcg.les.anagrama.enummeration.Nivel;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,39 +15,41 @@ public class SubMenuJogarActivity extends Activity {
 	private String nomeJogador = "";
 	private EditText editText;
 	
+	private static final String GUEST = "Guest";
+	private static final String VAZIO = "";
+	
 	 @Override
 	    public void onCreate(Bundle savedInstanceState) {
 	        super.onCreate(savedInstanceState);
 	        setContentView(R.layout.sub_page_jogar);
 	        
+	        Intent nivelIntent = getIntent();
+	        Nivel nivel = (Nivel) nivelIntent.getSerializableExtra("nivel");
+	        
 	        editText = (EditText) findViewById(R.id.edittext);
 	        
-	        botaoOkAction();
+	        botaoOkAction(nivel);
 	        botaoLimparAction();
 	        botaoCancelarAction();
 	        
 	    }
 
-	private void botaoOkAction() {
+	private void botaoOkAction(Nivel nivel) {
 		Button botaoOk = (Button) findViewById(R.id.confirmar);
-		botaoOk.setOnClickListener(botaoOkListener());
+		botaoOk.setOnClickListener(botaoOkListener(nivel));
 		
 	}
 
-	private OnClickListener botaoOkListener() {
+	private OnClickListener botaoOkListener(final Nivel nivel) {
 		return new OnClickListener() {
 
 			public void onClick(View v) {
-				
-				if (nomeInvalido()) {
-					setNomeUsuario("Guest" + getRandon());
-				} else {
-					setNomeUsuario(editText.getText().toString());
-				}
+				setJogador();
 				
 				Intent okIntent = new Intent(SubMenuJogarActivity.this,
 						JogoActivity.class);
 				okIntent.putExtra("nomeJogador", nomeJogador);
+				okIntent.putExtra("nivel", nivel);
 				
 				startActivity(okIntent);
 			}
@@ -59,13 +62,21 @@ public class SubMenuJogarActivity extends Activity {
 		botaoLimpar.setOnClickListener(botaoLimparListener());
 		
 	}
+	
+	private void setJogador() {
+		if (nomeInvalido()) {
+			setNomeUsuario(GUEST + getRandon());
+		} else {
+			setNomeUsuario(editText.getText().toString());
+		}
+	}
 
 	private OnClickListener botaoLimparListener() {
 		return new OnClickListener() {
 
 			public void onClick(View v) {
-				editText.setText("");
-				setNomeUsuario("");
+				editText.setText(VAZIO);
+				setNomeUsuario(VAZIO);
 			}
 		};
 	}
@@ -88,7 +99,7 @@ public class SubMenuJogarActivity extends Activity {
 	}
 	
 	private boolean nomeInvalido() {
-		return editText.getText().toString().trim().equals("");
+		return editText.getText().toString().trim().equals(VAZIO);
 	}
 	
 	private String getRandon() {

@@ -1,5 +1,6 @@
 package ufcg.les.anagrama.activity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ufcg.les.anagrama.R;
@@ -14,9 +15,9 @@ public class JogoActivity extends Activity {
 	
 	private Jogo jogoAtual; 
 	
-	private List<List<String>> palavras;
+	private List<List<String>> palavras = new ArrayList<List<String>>();
 
-	private PalavrasDAO palavrasDao;
+	private PalavrasDAO palavrasDao = new PalavrasDAO();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +26,9 @@ public class JogoActivity extends Activity {
 		
 		Intent jogoIntent = getIntent();
 		String nomeJogador = jogoIntent.getStringExtra("nomeJogador");
+		Nivel nivel = (Nivel) jogoIntent.getSerializableExtra("nivel");
 		
-		Jogo jogo = new Jogo(nomeJogador);
+		Jogo jogo = new Jogo(nomeJogador, nivel);
 		setJogoAtual(jogo);
 		
 		carregarPalavras(jogoAtual.getNivel());

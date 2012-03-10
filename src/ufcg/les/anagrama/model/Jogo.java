@@ -6,10 +6,11 @@ public class Jogo {
 	
 	private String nomeJogador;
 	private int pontuacao;
-	private Nivel nivel = Nivel.NORMAL;
+	private Nivel nivel;
 	
-	public Jogo(String nomeJogador) {
+	public Jogo(String nomeJogador, Nivel nivel) {
 		this.nomeJogador = nomeJogador;
+		this.nivel = nivel;
 	}
 
 	public String getNomeJogador() {

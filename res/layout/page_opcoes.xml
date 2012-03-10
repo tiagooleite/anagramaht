@@ -39,4 +39,11 @@
             android:text="@string/dificil" />
     </RadioGroup>
     
+    <Button
+        android:id="@+id/nivelok"
+        android:layout_width="124dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/confirmar" />
+    
 </LinearLayout>
