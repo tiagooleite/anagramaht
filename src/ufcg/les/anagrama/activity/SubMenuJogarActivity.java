@@ -11,7 +11,7 @@ import android.widget.EditText;
 
 public class SubMenuJogarActivity extends Activity {
 	
-	private String nomeUsuario = "";
+	private String nomeJogador = "";
 	private EditText editText;
 	
 	 @Override
@@ -21,15 +21,13 @@ public class SubMenuJogarActivity extends Activity {
 	        
 	        editText = (EditText) findViewById(R.id.edittext);
 	        
-	        botaoOkActivity();
-	        
-	        botaoLimparActivity();
-	        
-	        botaoCancelarActivity();
+	        botaoOkAction();
+	        botaoLimparAction();
+	        botaoCancelarAction();
 	        
 	    }
 
-	private void botaoOkActivity() {
+	private void botaoOkAction() {
 		Button botaoOk = (Button) findViewById(R.id.confirmar);
 		botaoOk.setOnClickListener(botaoOkListener());
 		
@@ -46,13 +44,17 @@ public class SubMenuJogarActivity extends Activity {
 					setNomeUsuario(editText.getText().toString());
 				}
 				
-				//TODO TELA DO JOGO
+				Intent okIntent = new Intent(SubMenuJogarActivity.this,
+						JogoActivity.class);
+				okIntent.putExtra("nomeJogador", nomeJogador);
+				
+				startActivity(okIntent);
 			}
 		};
 	}
 	
 
-	private void botaoLimparActivity() {
+	private void botaoLimparAction() {
 		Button botaoLimpar = (Button) findViewById(R.id.limpar);
 		botaoLimpar.setOnClickListener(botaoLimparListener());
 		
@@ -68,7 +70,7 @@ public class SubMenuJogarActivity extends Activity {
 		};
 	}
 
-	private void botaoCancelarActivity() {
+	private void botaoCancelarAction() {
 		Button botaoCancelar = (Button) findViewById(R.id.cancelar);
 		botaoCancelar.setOnClickListener(botaoCancelarListener());
 		
@@ -96,11 +98,11 @@ public class SubMenuJogarActivity extends Activity {
 
 
 	public void setNomeUsuario(String nomeUsuario) {
-		this.nomeUsuario = nomeUsuario;
+		this.nomeJogador = nomeUsuario;
 	}
 
 	public String getNomeUsuario() {
-		return nomeUsuario;
+		return nomeJogador;
 	}
 	
 }
