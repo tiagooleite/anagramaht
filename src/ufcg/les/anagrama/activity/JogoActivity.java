@@ -10,8 +10,11 @@ import ufcg.les.anagrama.persistence.dao.PalavrasDAO;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 public class JogoActivity extends Activity {
+	
+	private static final String LOGS = "logs";
 	
 	private Jogo jogoAtual; 
 	
@@ -26,7 +29,14 @@ public class JogoActivity extends Activity {
 		
 		Intent jogoIntent = getIntent();
 		String nomeJogador = jogoIntent.getStringExtra("nomeJogador");
-		Nivel nivel = (Nivel) jogoIntent.getSerializableExtra("nivel");
+		Nivel nivel = null;
+		
+		try {
+			nivel = (Nivel) jogoIntent.getSerializableExtra("nivel");
+		} catch (Exception e) {
+			 Log.v(LOGS, "Nivel não escolhido pelo usuário." +
+			 		"Setado automaticamente para NORMAL.");
+		}
 		
 		Jogo jogo = new Jogo(nomeJogador, nivel);
 		setJogoAtual(jogo);

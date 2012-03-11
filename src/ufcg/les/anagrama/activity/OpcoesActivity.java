@@ -12,7 +12,7 @@ import android.widget.RadioGroup;
 
 public class OpcoesActivity extends Activity {
 	
-	private Nivel nivel = Nivel.FACIL;
+	private Nivel nivel;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {

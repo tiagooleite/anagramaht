@@ -11,15 +11,16 @@ public class Jogo {
 	
 	private String nomeJogador;
 	private int pontuacao;
-	private Nivel nivel;
+	private Nivel nivel = Nivel.NORMAL;
+	
 	private PalavrasDAO palavrasDAO;
 	private String palavraEmbaralhada;
 	private List<String> anagramas;
 	
 	public Jogo(String nomeJogador, Nivel nivel) {
-		this.nomeJogador = nomeJogador;
-		this.nivel = nivel;
-		palavrasDAO = new PalavrasDAO();
+		setNivel(nivel);
+		setNomeJogador(nomeJogador);
+		this.palavrasDAO = new PalavrasDAO();
 	}
 
 	public String getNomeJogador() {
@@ -43,7 +44,9 @@ public class Jogo {
 	}
 
 	public void setNivel(Nivel nivel) {
-		this.nivel = nivel;
+		if (nivel != null) {
+			this.nivel = nivel;
+		}
 	}
 	
 	public String getPalavraEmbaralhada() {
