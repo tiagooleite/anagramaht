@@ -8,6 +8,7 @@ import ufcg.les.anagrama.enummeration.Nivel;
 import ufcg.les.anagrama.exceptions.AnagramaNaoExistenteException;
 import ufcg.les.anagrama.exceptions.PalavraJaEncontradaException;
 import ufcg.les.anagrama.persistence.dao.PalavrasDAO;
+import ufcg.les.anagrama.util.ContabilizaPontos;
 import ufcg.les.anagrama.util.GeradorStrings;
 
 public class Jogo {
@@ -51,6 +52,10 @@ public class Jogo {
 		if (nivel != null) {
 			this.nivel = nivel;
 		}
+	}
+	
+	public int getPontuacaoTotal() {
+		return ContabilizaPontos.contabilizaPontuacaoTotal(this.anagramasEncontrados);
 	}
 	
 	public boolean jogoTerminou() {
