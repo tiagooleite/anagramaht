@@ -13,17 +13,17 @@ public final class R {
     public static final class drawable {
         public static final int android=0x7f020000;
         public static final int backgroundimg=0x7f020001;
-        public static final int ic_launcher=0x7f020002;
-        public static final int tela_inicial=0x7f020003;
+        public static final int caixa_letra=0x7f020002;
+        public static final int ic_launcher=0x7f020003;
+        public static final int tela_inicial=0x7f020004;
     }
     public static final class id {
         public static final int ajuda=0x7f050004;
         public static final int cancelar=0x7f05000f;
         public static final int confirmar=0x7f05000e;
         public static final int edittext=0x7f05000c;
-        public static final int edittextJogo=0x7f050006;
         public static final int group=0x7f05000d;
-        public static final int imageViewSubMenuJogar=0x7f050011;
+        public static final int imageViewSubMenuJogar=0x7f050006;
         public static final int imageViewTelaPrincipal=0x7f050000;
         public static final int jogar=0x7f050001;
         public static final int limpar=0x7f050010;

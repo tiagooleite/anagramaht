@@ -37,7 +37,6 @@ public class SubMenuJogarActivity extends Activity {
 	private void botaoOkAction(Nivel nivel) {
 		Button botaoOk = (Button) findViewById(R.id.confirmar);
 		botaoOk.setOnClickListener(botaoOkListener(nivel));
-		
 	}
 
 	private OnClickListener botaoOkListener(final Nivel nivel) {

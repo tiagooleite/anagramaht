@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 
 public class JogoActivity extends Activity {
 	
@@ -41,7 +42,12 @@ public class JogoActivity extends Activity {
 		Jogo jogo = new Jogo(nomeJogador, nivel);
 		setJogoAtual(jogo);
 		
-		carregarPalavras(jogoAtual.getNivel());
+		int tamanhoPalavra = jogo.carregarNovoAnagrama();
+		
+//		ImageView caixaPalavra = new ImageView(getApplicationContext());
+//		caixaPalavra.set
+		
+		//carregarPalavras(jogoAtual.getNivel());
 	}
 
 	private void carregarPalavras(Nivel nivel) {

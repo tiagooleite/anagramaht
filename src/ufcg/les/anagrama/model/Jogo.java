@@ -83,10 +83,11 @@ public class Jogo {
 		return this.anagramas;
 	}
 	
-	public void carregarNovoAnagrama(){
+	public int carregarNovoAnagrama(){
 		this.anagramas = getListaAnagramasAleatoria(palavrasDAO.getPalavrasPorNivel(getNivel()));
 		this.palavraEmbaralhada = getPalavraEmbaralhada(this.anagramas);
 		this.anagramasEncontrados = new ArrayList<String>();
+		return anagramas.get(0).length();
 	}
 	
 	private String getPalavraEmbaralhada(List<String> anagramas) {
