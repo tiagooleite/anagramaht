@@ -1,9 +1,12 @@
 package ufcg.les.anagrama.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import ufcg.les.anagrama.enummeration.Nivel;
+import ufcg.les.anagrama.exceptions.AnagramaNaoExistenteException;
+import ufcg.les.anagrama.exceptions.PalavraJaEncontradaException;
 import ufcg.les.anagrama.persistence.dao.PalavrasDAO;
 import ufcg.les.anagrama.util.GeradorStrings;
 
@@ -16,6 +19,7 @@ public class Jogo {
 	private PalavrasDAO palavrasDAO;
 	private String palavraEmbaralhada;
 	private List<String> anagramas;
+	private List<String> anagramasEncontrados;
 	
 	public Jogo(String nomeJogador, Nivel nivel) {
 		setNivel(nivel);
@@ -49,6 +53,28 @@ public class Jogo {
 		}
 	}
 	
+	public boolean jogoTerminou() {
+		return this.anagramasEncontrados.size() >= this.anagramas.size();
+	}
+	
+	public boolean checarPalavra(String palavra) throws RuntimeException {
+		String palavraAChecar = palavra.toLowerCase();
+		
+		if(this.anagramasEncontrados.contains(palavraAChecar)) {
+			throw new PalavraJaEncontradaException(palavra);
+			
+		} else if(this.anagramas.contains(palavraAChecar)) {
+			throw new AnagramaNaoExistenteException(palavra);
+			
+		} else {
+			return this.anagramasEncontrados.add(palavraAChecar);
+		}
+	}
+	
+	public boolean checarPalavra(char[] palavra) {
+		return checarPalavra(String.copyValueOf(palavra));
+	}
+	
 	public String getPalavraEmbaralhada() {
 		return this.palavraEmbaralhada;
 	}
@@ -60,6 +86,7 @@ public class Jogo {
 	public void carregarNovoAnagrama(){
 		this.anagramas = getListaAnagramasAleatoria(palavrasDAO.getPalavrasPorNivel(getNivel()));
 		this.palavraEmbaralhada = getPalavraEmbaralhada(this.anagramas);
+		this.anagramasEncontrados = new ArrayList<String>();
 	}
 	
 	private String getPalavraEmbaralhada(List<String> anagramas) {
