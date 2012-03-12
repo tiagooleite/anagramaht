@@ -1,7 +1,7 @@
 package ufcg.les.anagrama.exceptions;
 
 public class AnagramaNaoExistenteException extends RuntimeException {
-	private final static String MENSAGEM = "Essa palavra nao eh um anagrama: ";
+	private final static String MENSAGEM = "Esta palavra não é um anagrama: ";
 	/**
 	 * 
 	 */

@@ -90,9 +90,7 @@ public class SubMenuJogarActivity extends Activity {
 		return new OnClickListener() {
 
 			public void onClick(View v) {
-				Intent settingsButton = new Intent(SubMenuJogarActivity.this,
-						AnagramaHTActivity.class);
-				startActivity(settingsButton);
+				finish();
 			}
 		};
 	}

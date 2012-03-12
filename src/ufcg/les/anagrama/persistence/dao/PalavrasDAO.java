@@ -9,10 +9,10 @@ import ufcg.les.anagrama.enummeration.Nivel;
 
 public class PalavrasDAO extends GenericDAOImpl<String> {
 	
-	private Map<Nivel, List<List<String>>> palavrasPorNivel =
-			new HashMap<Nivel, List<List<String>>>();
+	private Map<Nivel, List<List<String>>> palavrasPorNivel;
 	
 	public PalavrasDAO() {
+		palavrasPorNivel = new HashMap<Nivel, List<List<String>>>();
 		carregarPalavras();
 	}
 
@@ -30,13 +30,30 @@ public class PalavrasDAO extends GenericDAOImpl<String> {
 	
 	private void carregarPalavras() {
 		List<List<String>> listaFacil = new ArrayList<List<String>>();
+		List<List<String>> listaNormal = new ArrayList<List<String>>();
 		
 		ArrayList<String> anagramasAmor = carregaAnagramaAmor();
+		ArrayList<String> anagramasPrato = carregaAnagramaPrato();
 		
 		listaFacil.add(anagramasAmor);
+		listaNormal.add(anagramasPrato);
 		
-		palavrasPorNivel.put(Nivel.NORMAL, listaFacil);
-		
+		palavrasPorNivel.put(Nivel.FACIL, listaFacil);
+		palavrasPorNivel.put(Nivel.NORMAL, listaNormal);
+		palavrasPorNivel.put(Nivel.DIFICIL, listaFacil);
+	}
+
+	private ArrayList<String> carregaAnagramaPrato() {
+		ArrayList<String> anagramasPrato = new ArrayList<String>();
+		anagramasPrato.add("trapo");
+		anagramasPrato.add("tropa");
+		anagramasPrato.add("parto");
+		anagramasPrato.add("porta");
+		anagramasPrato.add("rapto");
+		anagramasPrato.add("topar");
+		anagramasPrato.add("prato");
+		anagramasPrato.add("optar");
+		return anagramasPrato;
 	}
 
 	private ArrayList<String> carregaAnagramaAmor() {

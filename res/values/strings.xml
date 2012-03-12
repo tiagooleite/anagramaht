@@ -20,4 +20,7 @@
     <string name="facil">Fácil</string>
     <string name="normal">Normal</string>
 	<string name="dificil">Difícil</string>
+	<string name="cronometro">Cronometro</string>
+	<string name="enviar">Enviar</string>
+	<string name="teste">teste</string>
 </resources>

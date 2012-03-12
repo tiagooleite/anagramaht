@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import android.util.Log;
+
 import ufcg.les.anagrama.enummeration.Nivel;
 import ufcg.les.anagrama.exceptions.AnagramaNaoExistenteException;
 import ufcg.les.anagrama.exceptions.PalavraJaEncontradaException;
@@ -12,6 +14,8 @@ import ufcg.les.anagrama.util.ContabilizaPontos;
 import ufcg.les.anagrama.util.GeradorStrings;
 
 public class Jogo {
+	
+	private static final String LOGS = "logs";
 	
 	private String nomeJogador;
 	private int pontuacao;
@@ -26,6 +30,7 @@ public class Jogo {
 		setNivel(nivel);
 		setNomeJogador(nomeJogador);
 		this.palavrasDAO = new PalavrasDAO();
+		this.anagramas = new ArrayList<String>();
 	}
 
 	public String getNomeJogador() {
@@ -65,14 +70,14 @@ public class Jogo {
 	public boolean checarPalavra(String palavra) throws RuntimeException {
 		String palavraAChecar = palavra.toLowerCase();
 		
-		if(this.anagramasEncontrados.contains(palavraAChecar)) {
+		if(anagramasEncontrados.contains(palavraAChecar)) {
 			throw new PalavraJaEncontradaException(palavra);
 			
-		} else if(this.anagramas.contains(palavraAChecar)) {
+		} else if(!anagramas.contains(palavraAChecar)) {
 			throw new AnagramaNaoExistenteException(palavra);
 			
 		} else {
-			return this.anagramasEncontrados.add(palavraAChecar);
+			return anagramasEncontrados.add(palavraAChecar);
 		}
 	}
 	
@@ -89,8 +94,13 @@ public class Jogo {
 	}
 	
 	public int carregarNovoAnagrama(){
-		this.anagramas = getListaAnagramasAleatoria(palavrasDAO.getPalavrasPorNivel(getNivel()));
-		this.palavraEmbaralhada = getPalavraEmbaralhada(this.anagramas);
+		this.anagramas = getListaAnagramasAleatoria(
+				palavrasDAO.getPalavrasPorNivel(getNivel()));
+		Log.v(LOGS, "Tamanho da lista Anagramas" + String.valueOf(anagramas.size()));
+		
+		this.palavraEmbaralhada = getPalavraEmbaralhada(anagramas);
+		Log.v(LOGS, "Palavra embaralhada" + palavraEmbaralhada);
+		
 		this.anagramasEncontrados = new ArrayList<String>();
 		return anagramas.get(0).length();
 	}
@@ -101,8 +111,12 @@ public class Jogo {
 	
 	private List<String> getListaAnagramasAleatoria(List<List<String>> palavrasPorNivel) {
 		int tamanho = palavrasPorNivel.size();
+		Log.v(LOGS, "Tamanho => " + String.valueOf(tamanho));
+		
 		Random gerador = new Random();
 		int tamanhoAleatorio = gerador.nextInt(tamanho);
+		Log.v(LOGS, "Tamanho Aleatorio => " + String.valueOf(tamanhoAleatorio));
+		
 		return palavrasPorNivel.get(tamanhoAleatorio);		
 	}
 }
