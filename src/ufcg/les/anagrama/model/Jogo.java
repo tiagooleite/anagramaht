@@ -17,6 +17,10 @@ public class Jogo {
 	
 	private static final String LOGS = "logs";
 	
+	private static final int PONTO = 50;
+	private static final int PALAVRA_ENCONTRADA = 5;
+	private static final int PALAVRA_INEXISTENTE = 8;
+	
 	private String nomeJogador;
 	private int pontuacao;
 	private Nivel nivel = Nivel.NORMAL;
@@ -67,17 +71,34 @@ public class Jogo {
 		return this.anagramasEncontrados.size() >= this.anagramas.size();
 	}
 	
+	public int totalPalavrasRestantes() {
+		return this.anagramas.size() - this.anagramasEncontrados.size();
+	}
+	
 	public boolean checarPalavra(String palavra) throws RuntimeException {
 		String palavraAChecar = palavra.toLowerCase();
 		
 		if(anagramasEncontrados.contains(palavraAChecar)) {
+			decrementaPontuacao(PALAVRA_ENCONTRADA);
 			throw new PalavraJaEncontradaException(palavra);
 			
 		} else if(!anagramas.contains(palavraAChecar)) {
+			decrementaPontuacao(PALAVRA_INEXISTENTE);
 			throw new AnagramaNaoExistenteException(palavra);
 			
 		} else {
+			incrementaPontuacao(PONTO);
 			return anagramasEncontrados.add(palavraAChecar);
+		}
+	}
+	
+	public void incrementaPontuacao(int valor) {
+		pontuacao += valor;
+	}
+	
+	public void decrementaPontuacao(int valor) {
+		if (pontuacao > 10) {
+			pontuacao -= valor;
 		}
 	}
 	

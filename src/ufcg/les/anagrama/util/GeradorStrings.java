@@ -12,7 +12,7 @@ public class GeradorStrings {
 		char[] palavraEmbaralhada = new char[tamanhoPalavra];
 		
 		for (int i = 0; i < palavraEmbaralhada.length; i++) {
-			palavraEmbaralhada[i] = palavra.charAt(posicoesAleatorias.pollFirst());
+			palavraEmbaralhada[i] = palavra.charAt(posicoesAleatorias.poll());
 		}
 		return String.copyValueOf(palavraEmbaralhada);
 	}

@@ -40,6 +40,7 @@ public class AnagramaHTActivity extends Activity {
 				Intent settingsButton = new Intent(AnagramaHTActivity.this,
 						OpcoesActivity.class);
 				startActivity(settingsButton);
+				finish();
 			}
 		};
 	}
@@ -59,6 +60,7 @@ public class AnagramaHTActivity extends Activity {
 						SubMenuJogarActivity.class);
 				settingsButton.putExtra("nivel", nivel);
 				startActivity(settingsButton);
+				//finish();
 			}
 		};
 	}
@@ -74,6 +76,15 @@ public class AnagramaHTActivity extends Activity {
 		Button botaoSair = (Button) findViewById(R.id.sair);
         botaoSair.setOnClickListener(botaoSairListener());
 	}
+	
+	private OnClickListener botaoSairListener() {
+		return new OnClickListener() { 
+			
+			public void onClick(View v) {
+				finish();
+			}
+		};
+	}
 
 
 	private OnClickListener botaoAjudaListener() {
@@ -87,12 +98,5 @@ public class AnagramaHTActivity extends Activity {
 		};
 	}
 	
-	private OnClickListener botaoSairListener() {
-		return new OnClickListener() { 
-			
-			public void onClick(View v) {
-				finish();
-			}
-		};
-	}
+	
 }

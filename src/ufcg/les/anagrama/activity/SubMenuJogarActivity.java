@@ -51,6 +51,7 @@ public class SubMenuJogarActivity extends Activity {
 				okIntent.putExtra("nivel", nivel);
 				
 				startActivity(okIntent);
+				finish();
 			}
 		};
 	}

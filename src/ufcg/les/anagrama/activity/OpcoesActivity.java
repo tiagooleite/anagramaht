@@ -40,6 +40,7 @@ public class OpcoesActivity extends Activity {
 				AnagramaHTActivity.class);
 		okIntent.putExtra("nivel", nivel);
 		startActivity(okIntent);
+		finish();
 	}
 	
 	private void getOpcaoNivelJogador() {

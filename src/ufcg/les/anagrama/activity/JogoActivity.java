@@ -26,6 +26,8 @@ public class JogoActivity extends Activity {
 	
 	private static final String LOGS = "logs";
 	private static final String BOA_SORTE = "Boa Sorte, ";
+	public static int palavrasRestantes;
+	public static final String VAZIO= "";
 	
 	private static List<String> palavrasEncontradasListPrimeiraColuna = new ArrayList<String>();
 	private static List<String> palavrasEncontradasListSegundaColuna = new ArrayList<String>();
@@ -35,6 +37,7 @@ public class JogoActivity extends Activity {
 	
 	private TextView palavraTextView;
 	private EditText respostaEditText;
+	private Chronometer cronometro;
 	
 	
 	private List<List<String>> palavras = new ArrayList<List<String>>();
@@ -44,16 +47,13 @@ public class JogoActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.page_jogo);
 		
+		limpaPalavrasEncontradas();
+		
 		Intent jogoIntent = getIntent();
 		String nomeJogador = jogoIntent.getStringExtra("nomeJogador");
-		Nivel nivel = null;
 		
-		try {
-			nivel = (Nivel) jogoIntent.getSerializableExtra("nivel");
-		} catch (Exception e) {
-			 Log.v(LOGS, "Nivel não escolhido pelo usuário." +
-			 		"Setado automaticamente para NORMAL.");
-		}
+		Nivel nivel = null;
+		nivel = (Nivel) jogoIntent.getSerializableExtra("nivel");
 		
 		Jogo jogo = new Jogo(nomeJogador, nivel);
 		setJogoAtual(jogo);
@@ -64,7 +64,22 @@ public class JogoActivity extends Activity {
 		
 		Button botaoEnviar = (Button) findViewById(R.id.botaoEnviar);
 		botaoEnviar.setOnClickListener(botaoEnviarListener());
+		
 		//carregaCaixaLetras(tamanhoPalavra);
+	}
+
+	private static void limpaPalavrasEncontradas() {
+		palavrasEncontradasListPrimeiraColuna.clear();
+		palavrasEncontradasListSegundaColuna.clear();
+		palavrasEncontradasListTerceiraColuna.clear();
+	}
+
+	private void verificaFimDoJogo() {
+		if (palavrasRestantes == 0) {
+			mostraDialog("FIM DE JOGO" + "\n\n Parabéns: " + jogoAtual.getNomeJogador()
+					+ "\n Pontuação: " + jogoAtual.getPontuacao()
+					+ "\n Tempo: " + cronometro.getText(), alertaFimListener());
+		}
 	}
 
 	private OnClickListener botaoEnviarListener() {
@@ -80,24 +95,37 @@ public class JogoActivity extends Activity {
 					TextView acertoColuna2 = (TextView) findViewById(R.id.acertosColuna2);
 					TextView acertoColuna3 = (TextView) findViewById(R.id.acertosColuna3);
 					
-					if (primeiraListaVazia()) {
-						palavrasEncontradasListPrimeiraColuna.add(resposta);
+					atualizaPalavrasRestantes();
 					
-					} else if (primeiraListaCheira()) {
-						palavrasEncontradasListSegundaColuna.add(resposta);
+					mostraPalavrasTela(resposta, acertoColuna1, acertoColuna2,
+							acertoColuna3);
 					
-					} else {
-						palavrasEncontradasListTerceiraColuna.add(resposta);
-					}
+					verificaFimDoJogo();
 					
-					mostraPalavras(acertoColuna1, acertoColuna2, acertoColuna3);
+					respostaEditText.setText(VAZIO);
 				
 				} catch (AnagramaNaoExistenteException re) {
-					trataExcecao("Esta não é uma palavra listada!");
+					mostraDialog("Esta não é uma palavra listada!", alertaListener());
 				
 				} catch (PalavraJaEncontradaException pe) {
-					trataExcecao("Esta palavra já foi encontrada!");
+					mostraDialog("Esta palavra já foi encontrada!", alertaListener());
 				}
+			}
+
+			private void mostraPalavrasTela(String resposta,
+					TextView acertoColuna1, TextView acertoColuna2,
+					TextView acertoColuna3) {
+				if (primeiraListaVazia()) {
+					palavrasEncontradasListPrimeiraColuna.add(resposta);
+				
+				} else if (primeiraListaCheira()) {
+					palavrasEncontradasListSegundaColuna.add(resposta);
+				
+				} else {
+					palavrasEncontradasListTerceiraColuna.add(resposta);
+				}
+				
+				mostraPalavras(acertoColuna1, acertoColuna2, acertoColuna3);
 			}
 
 			private boolean primeiraListaVazia() {
@@ -147,20 +175,46 @@ public class JogoActivity extends Activity {
 		
 		respostaEditText = (EditText) findViewById(R.id.resposta);
 		
-		Chronometer cron = (Chronometer) findViewById(R.id.chronometer1);
-		cron.start();
+		cronometro = (Chronometer) findViewById(R.id.chronometer1);
+		cronometro.start();
+		
+		atualizaPalavrasRestantes();
+	}
+
+	private void atualizaPalavrasRestantes() {
+		palavrasRestantes = jogoAtual.totalPalavrasRestantes();
+		TextView palavrasRestantesTextView = (TextView) findViewById(R.id.textViewPalavrasRestantes);
+		palavrasRestantesTextView.setText("Faltam: " + palavrasRestantes + " palavras");
+		palavrasRestantesTextView.setVisibility(TextView.VISIBLE);
 	}
 	
 	
-	private void trataExcecao(String msg) {
-		AlertDialog alertaPalavraInexistente = new AlertDialog.Builder(
+	private void mostraDialog(String msg, DialogInterface.OnClickListener listener) {
+		AlertDialog alerta = new AlertDialog.Builder(
 				JogoActivity.this).create();
-		alertaPalavraInexistente.setMessage(msg);
-		alertaPalavraInexistente.setButton("Ok", alertaPalavraInexistenteListener());
-		alertaPalavraInexistente.show();
+		alerta.setMessage(msg);
+		alerta.setButton("Ok", listener);
+		alerta.show();
 	}
 	
-	private DialogInterface.OnClickListener alertaPalavraInexistenteListener() {
+	private DialogInterface.OnClickListener alertaFimListener() {
+		return new DialogInterface.OnClickListener() {
+			
+		      public void onClick(DialogInterface dialog, int which) {
+		         dialog.cancel();
+		         //mudaContexto();
+		         finish();
+		       }
+
+			private void mudaContexto() {
+				Intent okIntent = new Intent(JogoActivity.this,
+							AnagramaHTActivity.class);
+					startActivity(okIntent);
+			} };
+	}
+	
+	
+	private DialogInterface.OnClickListener alertaListener() {
 		return new DialogInterface.OnClickListener() {
 			
 		      public void onClick(DialogInterface dialog, int which) {
@@ -170,67 +224,67 @@ public class JogoActivity extends Activity {
 	
 	// --------------- Gambiarra --------------------
 
-	private void carregaCaixaLetras(int tamanhoPalavra) {
-		if (tamanhoPalavra == 3) {
-			carregaTresCaixas();
-		
-		} else if (tamanhoPalavra == 4) {
-			carregaQuatroCaixas();
-		
-		} else if (tamanhoPalavra == 5) {
-			carregaCincoCaixas();
-		
-		} else if (tamanhoPalavra == 6) {
-			carregaSeisCaixas();
-		
-		} else if (tamanhoPalavra == 7) {
-			carregaSeteCaixas();
-		
-		} else {
-			carregaOitoCaixas();
-		}
-	}
-
-	
-	private void carregaOitoCaixas() {
-		carregaSeteCaixas();
-		ImageView imagem8 = (ImageView) findViewById(R.id.caixa_letra8);
-		imagem8.setVisibility(ImageView.VISIBLE);
-	}
-
-	private void carregaSeteCaixas() {
-		carregaSeisCaixas();
-		ImageView imagem7 = (ImageView) findViewById(R.id.caixa_letra7);
-		imagem7.setVisibility(ImageView.VISIBLE);
-	}
-
-	private void carregaSeisCaixas() {
-		carregaCincoCaixas();
-		ImageView imagem6 = (ImageView) findViewById(R.id.caixa_letra6);
-		imagem6.setVisibility(ImageView.VISIBLE);
-	}
-
-	private void carregaCincoCaixas() {
-		carregaQuatroCaixas();
-		ImageView imagem5 = (ImageView) findViewById(R.id.caixa_letra5);
-		imagem5.setVisibility(ImageView.VISIBLE);
-	}
-
-	private void carregaQuatroCaixas() {
-		carregaTresCaixas();
-		ImageView imagem4 = (ImageView) findViewById(R.id.caixa_letra4);
-		imagem4.setVisibility(ImageView.VISIBLE);
-	}
-
-	private void carregaTresCaixas() {
-		ImageView imagem1 = (ImageView) findViewById(R.id.caixa_letra1);
-		ImageView imagem2 = (ImageView) findViewById(R.id.caixa_letra2);
-		ImageView imagem3 = (ImageView) findViewById(R.id.caixa_letra3);
-		
-		imagem1.setVisibility(ImageView.VISIBLE);
-		imagem2.setVisibility(ImageView.VISIBLE);
-		imagem3.setVisibility(ImageView.VISIBLE);
-	}
+//	private void carregaCaixaLetras(int tamanhoPalavra) {
+//		if (tamanhoPalavra == 3) {
+//			carregaTresCaixas();
+//		
+//		} else if (tamanhoPalavra == 4) {
+//			carregaQuatroCaixas();
+//		
+//		} else if (tamanhoPalavra == 5) {
+//			carregaCincoCaixas();
+//		
+//		} else if (tamanhoPalavra == 6) {
+//			carregaSeisCaixas();
+//		
+//		} else if (tamanhoPalavra == 7) {
+//			carregaSeteCaixas();
+//		
+//		} else {
+//			carregaOitoCaixas();
+//		}
+//	}
+//
+//	
+//	private void carregaOitoCaixas() {
+//		carregaSeteCaixas();
+//		ImageView imagem8 = (ImageView) findViewById(R.id.caixa_letra8);
+//		imagem8.setVisibility(ImageView.VISIBLE);
+//	}
+//
+//	private void carregaSeteCaixas() {
+//		carregaSeisCaixas();
+//		ImageView imagem7 = (ImageView) findViewById(R.id.caixa_letra7);
+//		imagem7.setVisibility(ImageView.VISIBLE);
+//	}
+//
+//	private void carregaSeisCaixas() {
+//		carregaCincoCaixas();
+//		ImageView imagem6 = (ImageView) findViewById(R.id.caixa_letra6);
+//		imagem6.setVisibility(ImageView.VISIBLE);
+//	}
+//
+//	private void carregaCincoCaixas() {
+//		carregaQuatroCaixas();
+//		ImageView imagem5 = (ImageView) findViewById(R.id.caixa_letra5);
+//		imagem5.setVisibility(ImageView.VISIBLE);
+//	}
+//
+//	private void carregaQuatroCaixas() {
+//		carregaTresCaixas();
+//		ImageView imagem4 = (ImageView) findViewById(R.id.caixa_letra4);
+//		imagem4.setVisibility(ImageView.VISIBLE);
+//	}
+//
+//	private void carregaTresCaixas() {
+//		ImageView imagem1 = (ImageView) findViewById(R.id.caixa_letra1);
+//		ImageView imagem2 = (ImageView) findViewById(R.id.caixa_letra2);
+//		ImageView imagem3 = (ImageView) findViewById(R.id.caixa_letra3);
+//		
+//		imagem1.setVisibility(ImageView.VISIBLE);
+//		imagem2.setVisibility(ImageView.VISIBLE);
+//		imagem3.setVisibility(ImageView.VISIBLE);
+//	}
 	
 	// --------------- FIM Gambiarra --------------------
 
