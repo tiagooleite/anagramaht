@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class ContabilizaPontos {
+	
 	private static final int TAMANHO_MINIMO_DA_PALAVRA = 3;
 	private static final int PONTUACAO_MINIMA = 50;
 	private static final int VALOR_DA_LETRA = 25;
