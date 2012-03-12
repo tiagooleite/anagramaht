@@ -34,6 +34,7 @@ public class JogoActivity extends Activity {
 	private static List<String> palavrasEncontradasListTerceiraColuna = new ArrayList<String>();
 	
 	private Jogo jogoAtual; 
+	//TODO teste
 	
 	private TextView palavraTextView;
 	private EditText respostaEditText;
