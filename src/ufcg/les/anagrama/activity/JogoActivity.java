@@ -13,18 +13,15 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class JogoActivity extends Activity {
 	
-	private static final String LOGS = "logs";
 	private static final String BOA_SORTE = "Boa Sorte, ";
 	public static int palavrasRestantes;
 	public static final String VAZIO= "";
@@ -34,9 +31,9 @@ public class JogoActivity extends Activity {
 	private static List<String> palavrasEncontradasListTerceiraColuna = new ArrayList<String>();
 	
 	private Jogo jogoAtual; 
-	//TODO teste
 	
 	private TextView palavraTextView;
+	private TextView pontuacaoTextView;
 	private EditText respostaEditText;
 	private Chronometer cronometro;
 	
@@ -77,10 +74,15 @@ public class JogoActivity extends Activity {
 
 	private void verificaFimDoJogo() {
 		if (palavrasRestantes == 0) {
+			salvaTempo();
 			mostraDialog("FIM DE JOGO" + "\n\n Parabéns: " + jogoAtual.getNomeJogador()
 					+ "\n Pontuação: " + jogoAtual.getPontuacao()
 					+ "\n Tempo: " + cronometro.getText(), alertaFimListener());
 		}
+	}
+
+	private void salvaTempo() {
+		jogoAtual.setTempo(cronometro.getBase());
 	}
 
 	private OnClickListener botaoEnviarListener() {
@@ -96,7 +98,7 @@ public class JogoActivity extends Activity {
 					TextView acertoColuna2 = (TextView) findViewById(R.id.acertosColuna2);
 					TextView acertoColuna3 = (TextView) findViewById(R.id.acertosColuna3);
 					
-					atualizaPalavrasRestantes();
+					atualizaVariaveisDoJogo();
 					
 					mostraPalavrasTela(resposta, acertoColuna1, acertoColuna2,
 							acertoColuna3);
@@ -106,10 +108,14 @@ public class JogoActivity extends Activity {
 					respostaEditText.setText(VAZIO);
 				
 				} catch (AnagramaNaoExistenteException re) {
+					
 					mostraDialog("Esta não é uma palavra listada!", alertaListener());
 				
 				} catch (PalavraJaEncontradaException pe) {
 					mostraDialog("Esta palavra já foi encontrada!", alertaListener());
+				
+				} finally {
+					atualizaPontuacao();
 				}
 			}
 
@@ -163,13 +169,16 @@ public class JogoActivity extends Activity {
 		for (String palavra : palavras) {
 			palavrasEncontradas += "\n- " + palavra;
 		}
-		System.out.println(palavrasEncontradas);
 		return palavrasEncontradas;
 	}
 
 	private void carregaVariaveisDoJogo(Jogo jogo) {
 		palavraTextView = (TextView) findViewById(R.id.textViewPalavraEmbaralhada);
 		palavraTextView.setText(jogo.getPalavraEmbaralhada());
+		
+		pontuacaoTextView = (TextView) findViewById(R.id.textViewPontuacao);
+		pontuacaoTextView.setVisibility(TextView.VISIBLE);
+		atualizaPontuacao();
 		
 		TextView nomeJogadorTextView = (TextView) findViewById(R.id.textViewJogador);
 		nomeJogadorTextView.setText(BOA_SORTE + jogo.getNomeJogador() + "!");
@@ -179,13 +188,32 @@ public class JogoActivity extends Activity {
 		cronometro = (Chronometer) findViewById(R.id.chronometer1);
 		cronometro.start();
 		
+		atualizaVariaveisDoJogo();
+	}
+
+	private void atualizaVariaveisDoJogo() {
 		atualizaPalavrasRestantes();
+		//atualizaPontuacao();
+	}
+
+	private void atualizaPontuacao() {
+		pontuacaoTextView.setText("Pontuação: " + jogoAtual.getPontuacao());
 	}
 
 	private void atualizaPalavrasRestantes() {
 		palavrasRestantes = jogoAtual.totalPalavrasRestantes();
-		TextView palavrasRestantesTextView = (TextView) findViewById(R.id.textViewPalavrasRestantes);
-		palavrasRestantesTextView.setText("Faltam: " + palavrasRestantes + " palavras");
+		
+		TextView palavrasRestantesTextView = (TextView)
+				findViewById(R.id.textViewPalavrasRestantes);
+		if (palavrasRestantes > 1) {
+			palavrasRestantesTextView.setText("Faltam: " +
+		    palavrasRestantes + " palavras");
+		
+		} else {
+			palavrasRestantesTextView.setText("Falta: " +
+		    palavrasRestantes + " palavra");
+		}
+		
 		palavrasRestantesTextView.setVisibility(TextView.VISIBLE);
 	}
 	
@@ -203,15 +231,9 @@ public class JogoActivity extends Activity {
 			
 		      public void onClick(DialogInterface dialog, int which) {
 		         dialog.cancel();
-		         //mudaContexto();
 		         finish();
 		       }
-
-			private void mudaContexto() {
-				Intent okIntent = new Intent(JogoActivity.this,
-							AnagramaHTActivity.class);
-					startActivity(okIntent);
-			} };
+			 };
 	}
 	
 	

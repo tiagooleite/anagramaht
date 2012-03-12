@@ -18,12 +18,13 @@ public class Jogo {
 	private static final String LOGS = "logs";
 	
 	private static final int PONTO = 50;
-	private static final int PALAVRA_ENCONTRADA = 5;
-	private static final int PALAVRA_INEXISTENTE = 8;
+	private static final int PALAVRA_ENCONTRADA = 40;
+	private static final int PALAVRA_INEXISTENTE = 20;
 	
 	private String nomeJogador;
 	private int pontuacao;
 	private Nivel nivel = Nivel.NORMAL;
+	private Long tempo;
 	
 	private PalavrasDAO palavrasDAO;
 	private String palavraEmbaralhada;
@@ -97,7 +98,7 @@ public class Jogo {
 	}
 	
 	public void decrementaPontuacao(int valor) {
-		if (pontuacao > 10) {
+		if (pontuacao > 40) {
 			pontuacao -= valor;
 		}
 	}
@@ -139,5 +140,13 @@ public class Jogo {
 		Log.v(LOGS, "Tamanho Aleatorio => " + String.valueOf(tamanhoAleatorio));
 		
 		return palavrasPorNivel.get(tamanhoAleatorio);		
+	}
+
+	public Long getTempo() {
+		return tempo;
+	}
+
+	public void setTempo(Long tempo) {
+		this.tempo = tempo;
 	}
 }
