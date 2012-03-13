@@ -70,7 +70,7 @@ public class RankingActivity extends Activity {
 				Intent okIntent = new Intent(RankingActivity.this,
 						AnagramaHTActivity.class);
 				startActivity(okIntent);
-				
+				finish();
 			}
 		};
 	}

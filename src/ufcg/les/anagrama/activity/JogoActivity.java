@@ -244,15 +244,15 @@ public class JogoActivity extends Activity {
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.cancel();
 				mudaContexto(usuario);
-				finish();
 			}
 
+			//TODO Tentativa quando existia o bd em memoria
 			private void mudaContexto(Usuario usuario) {
-				Intent fimIntent = new Intent(JogoActivity.this,
-						AnagramaHTActivity.class);
-				fimIntent.putExtra("usuario", usuario);
-
-				startActivity(fimIntent);
+//				Intent fimIntent = new Intent(JogoActivity.this,
+//						AnagramaHTActivity.class);
+//				fimIntent.putExtra("usuario", usuario);
+//
+//				startActivity(fimIntent);
 				finish();
 
 			}

@@ -65,9 +65,7 @@ public class AnagramaHTActivity extends Activity implements Serializable {
 	private void botaoOpcoesAction() {
 		Button botaoOpcoes = (Button) findViewById(R.id.opcoes);
         botaoOpcoes.setOnClickListener(botaoOpcoesListener());
-		
 	}
-
 
 	private OnClickListener botaoOpcoesListener() {
 		return new OnClickListener() {
