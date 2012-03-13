@@ -128,7 +128,12 @@ public class Jogo {
 	}
 	
 	private String getPalavraEmbaralhada(List<String> anagramas) {
-		return GeradorStrings.embaralhaPalavra(anagramas.get(0));
+		String palavraEmbaralhada = GeradorStrings.embaralhaPalavra(anagramas.get(0));
+		while(getAnagramas().contains(palavraEmbaralhada)) {
+			palavraEmbaralhada = GeradorStrings.embaralhaPalavra(anagramas.get(0));
+		}
+		
+		return palavraEmbaralhada;
 	}
 	
 	private List<String> getListaAnagramasAleatoria(List<List<String>> palavrasPorNivel) {
