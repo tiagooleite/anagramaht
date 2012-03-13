@@ -1,7 +1,11 @@
 package ufcg.les.anagrama.activity;
 
+import java.io.Serializable;
+
 import ufcg.les.anagrama.R;
 import ufcg.les.anagrama.enummeration.Nivel;
+import ufcg.les.anagrama.persistence.dao.RankingDAO;
+import ufcg.les.anagrama.persistence.dao.Usuario;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +13,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class AnagramaHTActivity extends Activity {
+public class AnagramaHTActivity extends Activity implements Serializable {
+	
+	private static final long serialVersionUID = -5308668553694718836L;
+	
+	private RankingDAO rankingDAO = new RankingDAO(this);
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -19,11 +27,39 @@ public class AnagramaHTActivity extends Activity {
         Intent nivelIntent = getIntent();
         Nivel nivel = (Nivel) nivelIntent.getSerializableExtra("nivel");
         
+        Intent usuarioIntent = getIntent();
+        Usuario usuario = (Usuario) usuarioIntent.getSerializableExtra("usuario");
+        
         botaoJogarAction(nivel);
+        botaoRankingAction(usuario, rankingDAO);
         botaoOpcoesAction();
         botaoAjudaAction();
         botaoSairAction();
     }
+    
+
+
+	private void botaoRankingAction(Usuario usuario, RankingDAO rankingDAO) {
+		Button botaoRanking = (Button) findViewById(R.id.ranking);
+        botaoRanking.setOnClickListener(botaoRankingListener(usuario, rankingDAO));
+		
+	}
+
+
+	private OnClickListener botaoRankingListener(final Usuario usuario,
+			final RankingDAO rankingDAO) {
+		return new OnClickListener() {
+
+			public void onClick(View v) {
+				Intent settingsButton = new Intent(AnagramaHTActivity.this,
+						RankingActivity.class);
+				settingsButton.putExtra("usuario", usuario);
+				settingsButton.putExtra("rankingDao", rankingDAO);
+				startActivity(settingsButton);
+				finish();
+			}
+		};
+	}
 
 
 	private void botaoOpcoesAction() {

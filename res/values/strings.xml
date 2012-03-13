@@ -4,7 +4,6 @@
     <string name="hello">Hello World, AnagramaHTActivity!</string>
     <string name="app_name">AnagramaHT</string>
     <string name="jogar">Jogar</string>
-    <string name="ranking">Ranking</string>
     <string name="opcoes">Opções</string>
     <string name="ajuda">Ajuda</string>
     <string name="sair">Sair</string>
@@ -23,4 +22,6 @@
 	<string name="cronometro">Cronometro</string>
 	<string name="enviar">Enviar</string>
 	<string name="teste">teste</string>
+	<string name="ranking">Ranking</string>
+	<string name="voltar">Voltar</string>
 </resources>

@@ -1,6 +1,11 @@
 package ufcg.les.anagrama.persistence.dao;
 
-public class Usuario implements Comparable<Usuario> {
+import java.io.Serializable;
+
+public class Usuario implements Comparable<Usuario>, Serializable {
+	
+	private static final long serialVersionUID = -6252383088422660695L;
+	
 	private String nome;
 	private int pontuacao;
 	private long tempo;
@@ -49,7 +54,7 @@ public class Usuario implements Comparable<Usuario> {
 	}
 	
 	@Override
-	public String toString(){
-		return "Nome: " + this.nome + "-> Pontucao: "+ this.pontuacao;
+	public String toString() {
+		return "Nome: " + this.nome + "-> Pontução: "+ this.pontuacao;
 	}
 }
