@@ -20,19 +20,19 @@
         <Chronometer
             android:id="@+id/chronometer1"
             android:layout_width="wrap_content"
-            android:layout_marginLeft="120dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom" />
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="120dp" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/textViewPalavrasRestantes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-    
-     <TextView
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:visibility="invisible" />
+
+    <TextView
         android:id="@+id/textViewPontuacao"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -61,7 +61,6 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="8dp"
         android:text="@string/enviar" />
-
 
     <LinearLayout
         android:id="@+id/groupAcertos"
@@ -95,6 +94,16 @@
             android:layout_marginLeft="40dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:visibility="invisible" />
+
     </LinearLayout>
+    
+    <ImageButton
+            android:id="@+id/imageButton1"
+            android:contentDescription="@string/sair"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="260dp"
+            android:layout_marginTop="80dp"
+            android:src="@drawable/fechar" />
 
 </LinearLayout>

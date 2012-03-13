@@ -19,6 +19,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class JogoActivity extends Activity {
@@ -186,6 +187,9 @@ public class JogoActivity extends Activity {
 	private void carregaVariaveisDoJogo(Jogo jogo) {
 		palavraTextView = (TextView) findViewById(R.id.textViewPalavraEmbaralhada);
 		palavraTextView.setText(jogo.getPalavraEmbaralhada());
+		
+		ImageButton botaoSair = (ImageButton) findViewById(R.id.imageButton1);
+		botaoSair.setOnClickListener(botaoSairListener());
 
 		pontuacaoTextView = (TextView) findViewById(R.id.textViewPontuacao);
 		pontuacaoTextView.setVisibility(TextView.VISIBLE);
@@ -200,6 +204,15 @@ public class JogoActivity extends Activity {
 		cronometro.start();
 
 		atualizaVariaveisDoJogo();
+	}
+
+	private OnClickListener botaoSairListener() {
+		return new OnClickListener() {
+			
+			public void onClick(View v) {
+				finish();
+			}
+		};
 	}
 
 	private void atualizaVariaveisDoJogo() {
