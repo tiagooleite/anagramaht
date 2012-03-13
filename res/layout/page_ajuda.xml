@@ -11,4 +11,44 @@
         android:layout_gravity="center_horizontal"
         android:text="@string/string_ajuda" />
     
+    <TextView
+        android:id="@+id/professor"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:textColor="#FFFFFF"  />
+    
+    <TextView
+        android:id="@+id/alunos"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="2dp"
+        android:textColor="#FFFFFF"  />
+    
+    <TextView
+        android:id="@+id/ajuda"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="2dp"
+        android:textColor="#FFFFFF"  />
+    
+    <TextView
+        android:id="@+id/sair"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="2dp"
+        android:textColor="#FFFFFF"  />
+    
+    <Button
+        android:id="@+id/voltarAjuda"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/voltar" />
+    
 </LinearLayout>
