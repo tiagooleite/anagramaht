@@ -9,19 +9,18 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class AjudaActivity extends Activity {
-	private final static String TEXTO_JOGAR = "Jogar: No menu jogar voc√™ iniciar√° o " +
-			"jogo ap√≥s inserir seu nome, ser√° apresentada uma palavra embaralhada e o " +
-			"jogador ter√° que entrar com os anagramas dessa palavra. Cada palavra encontrada " +
-			"vale 50 pontos e ser√° listada na tela, ao tentar enviar uma palavra j√° encontrada " +
-			"40 pontos ser√£o diminuidos do total.\n";
+	private final static String TEXTO_JOGAR = "Jogar: No menu jogar vocÍ iniciar· o " +
+			"jogo apÛs inserir seu nome. Ser· apresentada uma palavra embaralhada e o " +
+			"jogador ter· que entrar com os anagramas dessa palavra. Cada palavra encontrada " +
+			"vale 50 pontos e ser· listada na tela. Ao tentar enviar uma palavra j· encontrada " +
+			"40 pontos ser„o diminuÌdos do total. Caso o jogador erre uma palavra, " +
+			"ser· descontado 20 pontos do total.";
 	
-	private final static String TEXTO_RANKING = "Ranking: No menu ranking √© poss√≠vel ver " +
-			"a listagem dos 5 jogadores com melhor pontua√ß√£o.\n";
+	private final static String TEXTO_RANKING = "Ranking: No menu ranking È possÌvel ver " +
+			"a listagem dos 5 jogadores com melhor pontuaÁ„o.";
 	
-	private final static String TEXTO_OPCOES = "Op√ß√µes: No menu op√ß√µes √© poss√≠vel escolher " +
-			"o n√≠vel dos anagramas, que pode ser f√°cil, m√©dio ou dif√≠cil.\n";
-	
-	private final static String TEXTO_SAIR = "Sair: Para sair, escolha sair no menu principal.\n";
+	private final static String TEXTO_OPCOES = "OpÁıes: No menu opÁıes È possÌvel escolher " +
+			"o nnÌvel dos anagramas, que pode ser f·cil, mÈdio ou difÌcil.";
 	
 	
 	 @Override
@@ -29,17 +28,14 @@ public class AjudaActivity extends Activity {
 	        super.onCreate(savedInstanceState);
 	        setContentView(R.layout.page_ajuda);
 	        
-	        TextView professorTextView = (TextView) findViewById(R.id.professor);
-	        professorTextView.setText(TEXTO_JOGAR);
+	        TextView textViewJogar = (TextView) findViewById(R.id.jogar);
+	        textViewJogar.setText(TEXTO_JOGAR);
 			
-	        TextView desenvolvedoresTextView = (TextView) findViewById(R.id.alunos);
-	        desenvolvedoresTextView.setText(TEXTO_RANKING);
+	        TextView textViewRanking = (TextView) findViewById(R.id.rankingText);
+	        textViewRanking.setText(TEXTO_RANKING);
 			
 			TextView ajudaTextView = (TextView) findViewById(R.id.ajuda);
 			ajudaTextView.setText(TEXTO_OPCOES);
-			
-			TextView sairTextView = (TextView) findViewById(R.id.sair);
-			sairTextView.setText(TEXTO_SAIR);
 			
 			Button botaoVoltarAjuda = (Button) findViewById(R.id.voltarAjuda);
 			botaoVoltarAjuda.setOnClickListener(botaoVoltarAjudaListener());
