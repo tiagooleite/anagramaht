@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import ufcg.les.anagrama.R;
 import ufcg.les.anagrama.enummeration.Nivel;
+import ufcg.les.anagrama.persistence.FactoryDao;
 import ufcg.les.anagrama.persistence.dao.RankingDAO;
 import ufcg.les.anagrama.persistence.dao.Usuario;
 import android.app.Activity;
@@ -17,7 +18,7 @@ public class AnagramaHTActivity extends Activity implements Serializable {
 	
 	private static final long serialVersionUID = -5308668553694718836L;
 	
-	private RankingDAO rankingDAO = new RankingDAO(this);
+	private RankingDAO rankingDAO = FactoryDao.getRankingDaoInstance();
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,33 +28,41 @@ public class AnagramaHTActivity extends Activity implements Serializable {
         Intent nivelIntent = getIntent();
         Nivel nivel = (Nivel) nivelIntent.getSerializableExtra("nivel");
         
-        Intent usuarioIntent = getIntent();
-        Usuario usuario = (Usuario) usuarioIntent.getSerializableExtra("usuario");
-        
         botaoJogarAction(nivel);
-        botaoRankingAction(usuario, rankingDAO);
+        botaoRankingAction(rankingDAO);
         botaoOpcoesAction();
         botaoAjudaAction();
         botaoSairAction();
     }
     
+    @Override
+    protected void onResume() {
+    	super.onResume();
+    	
+    	Intent usuarioIntent = getIntent();
+        Usuario usuario = (Usuario) usuarioIntent.getSerializableExtra("usuario");
+        
+        if (usuario != null) {
+        	rankingDAO.addUsuario(usuario);
+        }
+    }
+    
 
 
-	private void botaoRankingAction(Usuario usuario, RankingDAO rankingDAO) {
+	private void botaoRankingAction(RankingDAO rankingDAO) {
 		Button botaoRanking = (Button) findViewById(R.id.ranking);
-        botaoRanking.setOnClickListener(botaoRankingListener(usuario, rankingDAO));
+        botaoRanking.setOnClickListener(botaoRankingListener(rankingDAO));
 		
 	}
 
 
-	private OnClickListener botaoRankingListener(final Usuario usuario,
+	private OnClickListener botaoRankingListener(
 			final RankingDAO rankingDAO) {
 		return new OnClickListener() {
 
 			public void onClick(View v) {
 				Intent settingsButton = new Intent(AnagramaHTActivity.this,
 						RankingActivity.class);
-				settingsButton.putExtra("usuario", usuario);
 				settingsButton.putExtra("rankingDao", rankingDAO);
 				startActivity(settingsButton);
 				finish();
@@ -94,7 +103,7 @@ public class AnagramaHTActivity extends Activity implements Serializable {
 						SubMenuJogarActivity.class);
 				settingsButton.putExtra("nivel", nivel);
 				startActivity(settingsButton);
-				//finish();
+				finish();
 			}
 		};
 	}
@@ -128,6 +137,7 @@ public class AnagramaHTActivity extends Activity implements Serializable {
 				  Intent settingsButton = new Intent(AnagramaHTActivity.this,
 						  AjudaActivity.class);
                   startActivity(settingsButton);
+                  //finish();
 			}
 		};
 	}

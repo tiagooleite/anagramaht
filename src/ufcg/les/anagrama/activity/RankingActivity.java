@@ -22,41 +22,41 @@ public class RankingActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.page_ranking);
 		
-		
 		Intent usuarioIntent = getIntent();
-        Usuario usuario = (Usuario) usuarioIntent.getSerializableExtra("usuario");
 
         RankingDAO rankingDao = (RankingDAO) usuarioIntent.getSerializableExtra("rankingDao");
-         
         
         listaUsuarios = rankingDao.getRanking();
-        
-        if (usuario != null) {
-        	rankingDao.addUsuario(usuario);
-        }
 		
 		carregaRanking();
 		
 		Button botaoVoltar = (Button) findViewById(R.id.voltarRanking);
 		botaoVoltar.setOnClickListener(botaoVoltarListener());
-		
 	}
 
 	private void carregaRanking() {
+		int totalUsuariosNoRanking = listaUsuarios.size();
+
 		TextView primeiroTextView = (TextView) findViewById(R.id.primeiro);
-		primeiroTextView.setText("1- " + listaUsuarios.get(4).toString());
-		
+		primeiroTextView.setText("1- "
+				+ listaUsuarios.get(totalUsuariosNoRanking - 1).toString());
+
 		TextView segundoTextView = (TextView) findViewById(R.id.segundo);
-		segundoTextView.setText("2- " + listaUsuarios.get(3).toString());
-		
+		segundoTextView.setText("2- "
+				+ listaUsuarios.get(totalUsuariosNoRanking - 2).toString());
+
 		TextView terceiroTextView = (TextView) findViewById(R.id.terceiro);
-		terceiroTextView.setText("3- " + listaUsuarios.get(2).toString());
-		
+		terceiroTextView.setText("3- "
+				+ listaUsuarios.get(totalUsuariosNoRanking - 3).toString());
+
 		TextView quartoTextView = (TextView) findViewById(R.id.quarto);
-		quartoTextView.setText("4- " + listaUsuarios.get(1).toString());
-		
+		quartoTextView.setText("4- "
+				+ listaUsuarios.get(totalUsuariosNoRanking - 4).toString());
+
 		TextView quintoTextView = (TextView) findViewById(R.id.quinto);
-		quintoTextView.setText("5- " + listaUsuarios.get(0).toString());
+		quintoTextView.setText("5- "
+				+ listaUsuarios.get(totalUsuariosNoRanking - 5).toString());
+
 	}
 
 	private OnClickListener botaoVoltarListener() {

@@ -91,6 +91,9 @@ public class SubMenuJogarActivity extends Activity {
 		return new OnClickListener() {
 
 			public void onClick(View v) {
+				Intent fimIntent = new Intent(SubMenuJogarActivity.this,
+						AnagramaHTActivity.class);
+				startActivity(fimIntent);
 				finish();
 			}
 		};

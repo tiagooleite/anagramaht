@@ -55,6 +55,6 @@ public class Usuario implements Comparable<Usuario>, Serializable {
 	
 	@Override
 	public String toString() {
-		return "Nome: " + this.nome + "-> Pontução: "+ this.pontuacao;
+		return  this.nome + " ----- "+ this.pontuacao + " pontos";
 	}
 }

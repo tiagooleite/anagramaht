@@ -57,7 +57,7 @@ public class JogoActivity extends Activity {
 		Jogo jogo = new Jogo(nomeJogador, nivel);
 		setJogoAtual(jogo);
 
-		int tamanhoPalavra = jogo.carregarNovoAnagrama();
+		jogo.carregarNovoAnagrama();
 
 		carregaVariaveisDoJogo(jogo);
 
@@ -94,6 +94,11 @@ public class JogoActivity extends Activity {
 
 	private void salvaTempo() {
 		jogoAtual.setTempo(cronometro.getBase());
+		paraCronometro();
+	}
+
+	private void paraCronometro() {
+		cronometro.stop();
 	}
 
 	private OnClickListener botaoEnviarListener() {
@@ -210,6 +215,9 @@ public class JogoActivity extends Activity {
 		return new OnClickListener() {
 			
 			public void onClick(View v) {
+				Intent fimIntent = new Intent(JogoActivity.this,
+						AnagramaHTActivity.class);
+				startActivity(fimIntent);
 				finish();
 			}
 		};
@@ -261,11 +269,11 @@ public class JogoActivity extends Activity {
 
 			//TODO Tentativa quando existia o bd em memoria
 			private void mudaContexto(Usuario usuario) {
-//				Intent fimIntent = new Intent(JogoActivity.this,
-//						AnagramaHTActivity.class);
-//				fimIntent.putExtra("usuario", usuario);
-//
-//				startActivity(fimIntent);
+				Intent fimIntent = new Intent(JogoActivity.this,
+						AnagramaHTActivity.class);
+				fimIntent.putExtra("usuario", usuario);
+
+				startActivity(fimIntent);
 				finish();
 
 			}

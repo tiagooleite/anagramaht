@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:configChanges="orientation" 
     android:background="@drawable/backgroundimg"
     android:orientation="vertical" >
 
@@ -15,6 +16,7 @@
             android:id="@+id/textViewJogador"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <Chronometer
@@ -22,13 +24,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginLeft="120dp" />
+            android:layout_marginLeft="130dp" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/textViewPalavrasRestantes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:visibility="invisible" />
 
@@ -36,6 +39,7 @@
         android:id="@+id/textViewPontuacao"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView

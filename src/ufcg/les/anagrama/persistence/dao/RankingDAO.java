@@ -5,26 +5,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import android.app.Activity;
-
 public class RankingDAO implements Serializable {
 
 	private static final long serialVersionUID = -7056832528147460984L;
 	
 	private List<Usuario> listUsuario;
 	private static final int TAMANHO_DO_RANKING = 5; 
-	private Activity activity;
 	
 	public RankingDAO() {
-		listUsuario = new ArrayList<Usuario>(TAMANHO_DO_RANKING);
+		listUsuario = new ArrayList<Usuario>();
 		carregaRanking();
 	}
 	
-	public RankingDAO(Activity activity) {
-		this();
-		this.activity = activity;
-	}
-
 	public void carregaRanking() {
 		listUsuario	= carregaRankingDefault(); // TODO Resgatar do banco de dados
 		Collections.sort(listUsuario);
@@ -37,15 +29,8 @@ public class RankingDAO implements Serializable {
 	public boolean addUsuario(Usuario usuario) {
 		listUsuario.add(usuario);
 		Collections.sort(listUsuario);
-		truncarRanking();
 		
 		return listUsuario.contains(usuario);
-	}
-	
-	private void truncarRanking() {
-		if(listUsuario.size() > TAMANHO_DO_RANKING) {
-			listUsuario.remove(listUsuario.size()-1);
-		}
 	}
 	
 	public String toString() {
