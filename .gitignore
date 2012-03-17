@@ -2,5 +2,6 @@ hs_err_pid*
 *.class
 *~
 bin/
+bin/*
 *.apk
 *.dex

@@ -42,13 +42,15 @@
         android:textColor="#FFFFFF"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <TextView
-        android:id="@+id/textViewPalavraEmbaralhada"
+    <LinearLayout
+        android:id="@+id/groupCaixinhas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:layout_marginTop="8dp"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal" >
+
+    </LinearLayout>
 
     <EditText
         android:id="@+id/resposta"
@@ -65,7 +67,15 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="8dp"
         android:text="@string/enviar" />
-
+    
+     <ImageButton
+        android:id="@+id/imageBotaoSair"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="250dp"
+        android:contentDescription="@string/sair"
+        android:src="@drawable/fechar" />
+    
     <LinearLayout
         android:id="@+id/groupAcertos"
         android:layout_width="wrap_content"
@@ -90,24 +100,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:visibility="invisible" />
 
-        <TextView
-            android:id="@+id/acertosColuna3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_marginLeft="40dp"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:visibility="invisible" />
-
     </LinearLayout>
     
-    <ImageButton
-            android:id="@+id/imageButton1"
-            android:contentDescription="@string/sair"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="260dp"
-            android:layout_marginTop="80dp"
-            android:src="@drawable/fechar" />
-
+   
 </LinearLayout>

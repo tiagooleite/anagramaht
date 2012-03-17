@@ -11,9 +11,55 @@ public class PalavrasDAO extends GenericDAOImpl<String> {
 	
 	private Map<Nivel, List<List<String>>> palavrasPorNivel;
 	
+	//Nova maneira de amarmazenar as palavras
+	private Map<String, List<String>> anagramaasCorrespondentesFacil;
+	
+	// ---------------------------------------
+	
 	public PalavrasDAO() {
+		anagramaasCorrespondentesFacil = new HashMap<String, List<String>>();
 		palavrasPorNivel = new HashMap<Nivel, List<List<String>>>();
 		carregarPalavras();
+		//nova implementação
+		carregaPalavras(); 
+	}
+
+	//NIVEL FACIL PARA A NOVA IMPLEMENTACAO
+	private void carregaPalavras() {
+		carregaPalavrasFacil();
+		carregaPalavrasNormal();
+	}
+
+	private void carregaPalavrasNormal() {
+		String palavra = "trapo";
+		List<String> listaFacil = new ArrayList<String>();
+		listaFacil.add("trapo");
+		listaFacil.add("tropa");
+		listaFacil.add("parto");
+		listaFacil.add("porta");
+		listaFacil.add("rapto");
+		listaFacil.add("topar");
+		listaFacil.add("prato");
+		listaFacil.add("optar");
+		listaFacil.add("rato");
+		listaFacil.add("ato");
+		listaFacil.add("pato");
+		listaFacil.add("topa");
+		
+		anagramaasCorrespondentesFacil.put(palavra, listaFacil);
+		
+	}
+
+	private void carregaPalavrasFacil() {
+		String palavra = "rato";
+		List<String> listaFacil = new ArrayList<String>();
+		listaFacil.add("rota");
+		listaFacil.add("ato");
+		listaFacil.add("tora");
+		listaFacil.add("toar");
+		listaFacil.add("rato");
+		
+		anagramaasCorrespondentesFacil.put(palavra, listaFacil);
 	}
 
 	public List<List<String>> getPalavrasPorNivel(Nivel nivel) {
@@ -155,6 +201,7 @@ public class PalavrasDAO extends GenericDAOImpl<String> {
 		anagramasRato.add("rota");
 		anagramasRato.add("toar");
 		anagramasRato.add("tora");
+		anagramasRato.add("ator");
 		return anagramasRato;
 	}
 	

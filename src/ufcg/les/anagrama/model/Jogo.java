@@ -94,11 +94,21 @@ public class Jogo {
 	}
 	
 	public void incrementaPontuacao(int valor) {
+//		if (nivel.equals(Nivel.NORMAL)) {
+//			valor += 15;
+//		} else if (nivel.equals(Nivel.DIFICIL)) {
+//			valor += 30;
+//		}
 		pontuacao += valor;
 	}
 	
 	public void decrementaPontuacao(int valor) {
 		if (pontuacao > 40) {
+//			if (nivel.equals(Nivel.NORMAL)) {
+//				valor += 15;
+//			} else if (nivel.equals(Nivel.DIFICIL)) {
+//				valor += 30;
+//			}
 			pontuacao -= valor;
 		}
 	}
@@ -115,13 +125,14 @@ public class Jogo {
 		return this.anagramas;
 	}
 	
+//	public int carregaAnagramaTeste() {
+//	}
+	
 	public int carregarNovoAnagrama(){
 		this.anagramas = getListaAnagramasAleatoria(
 				palavrasDAO.getPalavrasPorNivel(getNivel()));
-		Log.v(LOGS, "Tamanho da lista Anagramas" + String.valueOf(anagramas.size()));
 		
 		this.palavraEmbaralhada = getPalavraEmbaralhada(anagramas);
-		Log.v(LOGS, "Palavra embaralhada" + palavraEmbaralhada);
 		
 		this.anagramasEncontrados = new ArrayList<String>();
 		return anagramas.get(0).length();
