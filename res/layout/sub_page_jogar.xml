@@ -9,11 +9,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:textColor="#FFFFFF"
         android:text="@string/sub_menu_jogar" />
     
     <EditText
         android:id="@+id/edittext"
         android:layout_marginTop="30dp"
+        android:maxLength="12"
+        android:soundEffectsEnabled="true"
         android:inputType="textPersonName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"/>

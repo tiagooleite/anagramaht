@@ -20,6 +20,8 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 public class JogoActivity extends Activity {
@@ -27,28 +29,96 @@ public class JogoActivity extends Activity {
 	private static final String BOA_SORTE = "Boa Sorte, ";
 	public static int palavrasRestantes;
 	public static final String VAZIO = "";
+	private static final int TAMANHO_CAIXINHA = 55; //setar para 30 quando for passar para o celular
+	private static final float TAMANHO_LETRA = 15; //comenta isso quando for passar para o celular
+	private static String meusPalpites = "";
+	private List<Button> listaBotoesPalavras = new ArrayList<Button>();
 
 	private static List<String> palavrasEncontradasListPrimeiraColuna = new ArrayList<String>();
 	private static List<String> palavrasEncontradasListSegundaColuna = new ArrayList<String>();
-	private static List<String> palavrasEncontradasListTerceiraColuna = new ArrayList<String>();
 
 	private Jogo jogoAtual;
 
-	private TextView palavraTextView;
 	private TextView pontuacaoTextView;
 	private EditText respostaEditText;
 	private Chronometer cronometro;
+	private ImageButton botaoSair;
+	
 
 	private List<List<String>> palavras = new ArrayList<List<String>>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.page_jogo);
-
+		limpaPalpites();
 		limpaPalavrasEncontradas();
-
+		
 		Intent jogoIntent = getIntent();
+		Jogo jogo = carregaVariaveisDoJogador(jogoIntent);
+		jogo.carregarNovoAnagrama();
+		
+		LinearLayout layout = carregaBotoesPalavra();
+
+        setContentView(layout);
+		
+		carregaVariaveisDoJogo();
+
+		Button botaoEnviar = (Button) findViewById(R.id.botaoEnviar);
+		botaoEnviar.setOnClickListener(botaoEnviarListener());
+	}
+
+	private static void limpaPalpites() {
+		meusPalpites = "";
+	}
+
+	private LinearLayout carregaBotoesPalavra() {
+		String palavraEmb = jogoAtual.getPalavraEmbaralhada();
+		
+		String[] splitPalavraEmb = palavraEmb.split("");
+		
+		LinearLayout layout = (LinearLayout) View.inflate(this,
+				R.layout.page_jogo, null);
+		LinearLayout vTblRow = (LinearLayout)layout.
+				findViewById(R.id.groupCaixinhas);
+		
+		for (int i = 1; i < splitPalavraEmb.length; i++) {
+			Button botaoLetra = new Button(this);
+			botaoLetra.setText(splitPalavraEmb[i]);
+			botaoLetra.setTextSize(TAMANHO_LETRA);
+			botaoLetra.setLayoutParams(new TableRow.
+					LayoutParams(TAMANHO_CAIXINHA, TAMANHO_CAIXINHA));
+			
+			vTblRow.addView(botaoLetra);
+			listaBotoesPalavras.add(botaoLetra);
+		}
+		
+		addOnClickListenerBotoes();
+		
+		
+		return layout;
+	}
+
+	private void addOnClickListenerBotoes() {
+		for (Button botaoLetra : listaBotoesPalavras) {
+			String letra = (String) botaoLetra.getText();
+			botaoLetra.setOnClickListener(clickListenerBotaoPalavra(letra, botaoLetra));
+		}
+		
+	}
+
+	private OnClickListener clickListenerBotaoPalavra(final String letra,
+			final Button botaoLetra) {
+		return new OnClickListener() {
+			
+			public void onClick(View v) {
+				meusPalpites += letra;
+				respostaEditText.setText(meusPalpites);
+				botaoLetra.setVisibility(Button.INVISIBLE);
+			}
+		};
+	}
+
+	private Jogo carregaVariaveisDoJogador(Intent jogoIntent) {
 		String nomeJogador = jogoIntent.getStringExtra("nomeJogador");
 
 		Nivel nivel = null;
@@ -56,21 +126,12 @@ public class JogoActivity extends Activity {
 
 		Jogo jogo = new Jogo(nomeJogador, nivel);
 		setJogoAtual(jogo);
-
-		jogo.carregarNovoAnagrama();
-
-		carregaVariaveisDoJogo(jogo);
-
-		Button botaoEnviar = (Button) findViewById(R.id.botaoEnviar);
-		botaoEnviar.setOnClickListener(botaoEnviarListener());
-
-		// carregaCaixaLetras(tamanhoPalavra);
+		return jogo;
 	}
 
 	private static void limpaPalavrasEncontradas() {
 		palavrasEncontradasListPrimeiraColuna.clear();
 		palavrasEncontradasListSegundaColuna.clear();
-		palavrasEncontradasListTerceiraColuna.clear();
 	}
 
 	private void verificaFimDoJogo() {
@@ -83,6 +144,8 @@ public class JogoActivity extends Activity {
 							+ jogoAtual.getNomeJogador() + "\n Pontuação: "
 							+ jogoAtual.getPontuacao() + "\n Tempo: "
 							+ cronometro.getText(), alertaFimListener(usuario));
+		} else {
+			apresentaBotoesPalavra();
 		}
 	}
 
@@ -100,6 +163,14 @@ public class JogoActivity extends Activity {
 	private void paraCronometro() {
 		cronometro.stop();
 	}
+	
+	private void apresentaBotoesPalavra() {
+		for (Button botao : listaBotoesPalavras) {
+			botao.setVisibility(Button.VISIBLE);
+		}
+		respostaEditText.setText("");
+		limpaPalpites();
+	}
 
 	private OnClickListener botaoEnviarListener() {
 		return new OnClickListener() {
@@ -112,12 +183,11 @@ public class JogoActivity extends Activity {
 
 					TextView acertoColuna1 = (TextView) findViewById(R.id.acertosColuna1);
 					TextView acertoColuna2 = (TextView) findViewById(R.id.acertosColuna2);
-					TextView acertoColuna3 = (TextView) findViewById(R.id.acertosColuna3);
 
 					atualizaVariaveisDoJogo();
 
 					mostraPalavrasTela(resposta, acertoColuna1, acertoColuna2,
-							acertoColuna3);
+							null);
 
 					verificaFimDoJogo();
 
@@ -127,10 +197,12 @@ public class JogoActivity extends Activity {
 
 					mostraDialog("Esta não é uma palavra listada!",
 							alertaListener());
+					apresentaBotoesPalavra();
 
 				} catch (PalavraJaEncontradaException pe) {
 					mostraDialog("Esta palavra já foi encontrada!",
 							alertaListener());
+					apresentaBotoesPalavra();
 
 				} finally {
 					atualizaPontuacao();
@@ -142,26 +214,15 @@ public class JogoActivity extends Activity {
 					TextView acertoColuna3) {
 				if (primeiraListaVazia()) {
 					palavrasEncontradasListPrimeiraColuna.add(resposta);
-
-				} else if (primeiraListaCheira()) {
-					palavrasEncontradasListSegundaColuna.add(resposta);
-
 				} else {
-					palavrasEncontradasListTerceiraColuna.add(resposta);
-				}
-
+					palavrasEncontradasListSegundaColuna.add(resposta);
+				} 
 				mostraPalavras(acertoColuna1, acertoColuna2, acertoColuna3);
 			}
 
 			private boolean primeiraListaVazia() {
 				return palavrasEncontradasListPrimeiraColuna.size() < 5;
 			}
-
-			private boolean primeiraListaCheira() {
-				return palavrasEncontradasListPrimeiraColuna.size() > 4
-						&& palavrasEncontradasListSegundaColuna.size() < 5;
-			}
-
 		};
 	}
 
@@ -176,9 +237,6 @@ public class JogoActivity extends Activity {
 				.setText(mostraPalavrasEncontradas(palavrasEncontradasListSegundaColuna));
 		acertoColuna2.setVisibility(TextView.VISIBLE);
 
-		acertoColuna3
-				.setText(mostraPalavrasEncontradas(palavrasEncontradasListTerceiraColuna));
-		acertoColuna3.setVisibility(TextView.VISIBLE);
 	}
 
 	private static CharSequence mostraPalavrasEncontradas(List<String> palavras) {
@@ -189,11 +247,9 @@ public class JogoActivity extends Activity {
 		return palavrasEncontradas;
 	}
 
-	private void carregaVariaveisDoJogo(Jogo jogo) {
-		palavraTextView = (TextView) findViewById(R.id.textViewPalavraEmbaralhada);
-		palavraTextView.setText(jogo.getPalavraEmbaralhada());
+	private void carregaVariaveisDoJogo() {
 		
-		ImageButton botaoSair = (ImageButton) findViewById(R.id.imageButton1);
+		botaoSair = (ImageButton) findViewById(R.id.imageBotaoSair);
 		botaoSair.setOnClickListener(botaoSairListener());
 
 		pontuacaoTextView = (TextView) findViewById(R.id.textViewPontuacao);
@@ -201,7 +257,7 @@ public class JogoActivity extends Activity {
 		atualizaPontuacao();
 
 		TextView nomeJogadorTextView = (TextView) findViewById(R.id.textViewJogador);
-		nomeJogadorTextView.setText(BOA_SORTE + jogo.getNomeJogador() + "!");
+		nomeJogadorTextView.setText(BOA_SORTE + jogoAtual.getNomeJogador() + "!");
 
 		respostaEditText = (EditText) findViewById(R.id.resposta);
 
@@ -210,6 +266,7 @@ public class JogoActivity extends Activity {
 
 		atualizaVariaveisDoJogo();
 	}
+
 
 	private OnClickListener botaoSairListener() {
 		return new OnClickListener() {
@@ -225,7 +282,6 @@ public class JogoActivity extends Activity {
 
 	private void atualizaVariaveisDoJogo() {
 		atualizaPalavrasRestantes();
-		// atualizaPontuacao();
 	}
 
 	private void atualizaPontuacao() {
@@ -289,72 +345,6 @@ public class JogoActivity extends Activity {
 		};
 	}
 
-	// --------------- Gambiarra --------------------
-
-	// private void carregaCaixaLetras(int tamanhoPalavra) {
-	// if (tamanhoPalavra == 3) {
-	// carregaTresCaixas();
-	//
-	// } else if (tamanhoPalavra == 4) {
-	// carregaQuatroCaixas();
-	//
-	// } else if (tamanhoPalavra == 5) {
-	// carregaCincoCaixas();
-	//
-	// } else if (tamanhoPalavra == 6) {
-	// carregaSeisCaixas();
-	//
-	// } else if (tamanhoPalavra == 7) {
-	// carregaSeteCaixas();
-	//
-	// } else {
-	// carregaOitoCaixas();
-	// }
-	// }
-	//
-	//
-	// private void carregaOitoCaixas() {
-	// carregaSeteCaixas();
-	// ImageView imagem8 = (ImageView) findViewById(R.id.caixa_letra8);
-	// imagem8.setVisibility(ImageView.VISIBLE);
-	// }
-	//
-	// private void carregaSeteCaixas() {
-	// carregaSeisCaixas();
-	// ImageView imagem7 = (ImageView) findViewById(R.id.caixa_letra7);
-	// imagem7.setVisibility(ImageView.VISIBLE);
-	// }
-	//
-	// private void carregaSeisCaixas() {
-	// carregaCincoCaixas();
-	// ImageView imagem6 = (ImageView) findViewById(R.id.caixa_letra6);
-	// imagem6.setVisibility(ImageView.VISIBLE);
-	// }
-	//
-	// private void carregaCincoCaixas() {
-	// carregaQuatroCaixas();
-	// ImageView imagem5 = (ImageView) findViewById(R.id.caixa_letra5);
-	// imagem5.setVisibility(ImageView.VISIBLE);
-	// }
-	//
-	// private void carregaQuatroCaixas() {
-	// carregaTresCaixas();
-	// ImageView imagem4 = (ImageView) findViewById(R.id.caixa_letra4);
-	// imagem4.setVisibility(ImageView.VISIBLE);
-	// }
-	//
-	// private void carregaTresCaixas() {
-	// ImageView imagem1 = (ImageView) findViewById(R.id.caixa_letra1);
-	// ImageView imagem2 = (ImageView) findViewById(R.id.caixa_letra2);
-	// ImageView imagem3 = (ImageView) findViewById(R.id.caixa_letra3);
-	//
-	// imagem1.setVisibility(ImageView.VISIBLE);
-	// imagem2.setVisibility(ImageView.VISIBLE);
-	// imagem3.setVisibility(ImageView.VISIBLE);
-	// }
-
-	// --------------- FIM Gambiarra --------------------
-
 	public Jogo getJogoAtual() {
 		return jogoAtual;
 	}
@@ -369,14 +359,6 @@ public class JogoActivity extends Activity {
 
 	public void setPalavras(List<List<String>> palavras) {
 		this.palavras = palavras;
-	}
-
-	public TextView getPalavraTextView() {
-		return palavraTextView;
-	}
-
-	public void setPalavraTextView(TextView palavraTextView) {
-		this.palavraTextView = palavraTextView;
 	}
 
 }
