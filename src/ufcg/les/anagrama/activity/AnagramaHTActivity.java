@@ -165,7 +165,9 @@ public class AnagramaHTActivity extends Activity implements Serializable {
 		try {
 			palavrasDAO.open();
 			//palavrasDAO.limpar();
-			palavrasDAO.criarPalavras();
+			if(!palavrasDAO.isBdPopulated()) {
+				palavrasDAO.criarPalavras();
+			}
 		} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
