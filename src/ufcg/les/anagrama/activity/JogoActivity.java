@@ -29,6 +29,7 @@ public class JogoActivity extends Activity {
 	private static final String BOA_SORTE = "Boa Sorte, ";
 	public static int palavrasRestantes;
 	public static final String VAZIO = "";
+	//no pc eh 55 no cel eh 30
 	private static final int TAMANHO_CAIXINHA = 55; //setar para 30 quando for passar para o celular
 	private static final float TAMANHO_LETRA = 15; //comenta isso quando for passar para o celular
 	private static String meusPalpites = "";
@@ -153,10 +154,16 @@ public class JogoActivity extends Activity {
 							+ jogoAtual.getNomeJogador() + "\n Pontuação: "
 							+ jogoAtual.getPontuacao() + "\n Tempo: "
 							+ cronometro.getText(), alertaFimListener(usuario));
+		} else {
+			apresentaBotoesPalavra();
 		}
 	}
 
 	private Usuario criaUsuario() {
+		System.out.println(jogoAtual.getNomeJogador());
+		System.out.println(jogoAtual.getPontuacao());
+		System.out.println(jogoAtual.getTempo());
+		
 		Usuario usuario = new Usuario(jogoAtual.getNomeJogador(),
 				jogoAtual.getPontuacao(), jogoAtual.getTempo());
 		return usuario;
@@ -189,9 +196,7 @@ public class JogoActivity extends Activity {
 					jogoAtual.checarPalavra(resposta);
 
 					TextView acertoColuna1 = (TextView) findViewById(R.id.acertosColuna1);
-					acertoColuna1.setTextSize(15);
 					TextView acertoColuna2 = (TextView) findViewById(R.id.acertosColuna2);
-					acertoColuna2.setTextSize(15);
 					
 					atualizaVariaveisDoJogo();
 
@@ -205,14 +210,15 @@ public class JogoActivity extends Activity {
 
 					mostraDialog("Esta não é uma palavra listada!",
 							alertaListener());
+					apresentaBotoesPalavra();
 
 				} catch (PalavraJaEncontradaException pe) {
 					mostraDialog("Esta palavra já foi encontrada!",
 							alertaListener());
+					apresentaBotoesPalavra();
 
 				} finally {
 					atualizaPontuacao();
-					apresentaBotoesPalavra();
 					limpaBuffer();
 				}
 			}
@@ -253,9 +259,15 @@ public class JogoActivity extends Activity {
 		String palavrasEncontradas = "";
 		
 		for (String palavra : palavras) {
-			palavrasEncontradas += "\n- " + palavra;
+				palavrasEncontradas += palavra + ", ";
 		}
+		
+		if (!palavrasEncontradas.equals("")) {
+			return palavrasEncontradas.substring(0, palavrasEncontradas.length()-2);
+		}
+		
 		return palavrasEncontradas;
+		
 	}
 
 	private void carregaVariaveisDoJogo() {
@@ -299,10 +311,19 @@ public class JogoActivity extends Activity {
 		return new OnClickListener() {
 			
 			public void onClick(View v) {
-				Intent fimIntent = new Intent(JogoActivity.this,
-						AnagramaHTActivity.class);
-				startActivity(fimIntent);
-				finish();
+				salvaTempo();
+				Usuario usuario = criaUsuario();
+				paraCronometro();
+				mostraDialog("Você está desistindo!" +
+						"\n\n Pontuação atual: " + jogoAtual.getPontuacao() +
+						"\n Tempo total: " + cronometro.getText(),
+						alertaFimListener(usuario));
+				
+//				Intent fimIntent = new Intent(JogoActivity.this,
+//						AnagramaHTActivity.class);
+//				
+//				startActivity(fimIntent);
+//				finish();
 			}
 		};
 	}
@@ -355,7 +376,6 @@ public class JogoActivity extends Activity {
 				Intent fimIntent = new Intent(JogoActivity.this,
 						AnagramaHTActivity.class);
 				fimIntent.putExtra("usuario", usuario);
-
 				startActivity(fimIntent);
 				finish();
 
