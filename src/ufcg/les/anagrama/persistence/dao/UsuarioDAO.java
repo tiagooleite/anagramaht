@@ -6,6 +6,7 @@ import java.util.List;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 public class UsuarioDAO extends GenericDAOImpl<Usuario> {
 	public UsuarioDAO(Context contexto) {
@@ -72,6 +73,13 @@ public class UsuarioDAO extends GenericDAOImpl<Usuario> {
 	public void inserirListaDeStrings(List<String> obj) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public void limpar() {
+		SQLiteDatabase bd = bdHelper.getWritableDatabase();
+		bd.execSQL("DROP TABLE IF EXISTS " + GenericDAOSQLiteHelper.TABELA_USUARIOS);
+		bd.execSQL(GenericDAOSQLiteHelper.CREATE_DB_USUARIOS);
 	}
 
 }
