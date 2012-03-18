@@ -32,7 +32,10 @@ public class JogoActivity extends Activity {
 	private static final int TAMANHO_CAIXINHA = 55; //setar para 30 quando for passar para o celular
 	private static final float TAMANHO_LETRA = 15; //comenta isso quando for passar para o celular
 	private static String meusPalpites = "";
+	
+
 	private List<Button> listaBotoesPalavras = new ArrayList<Button>();
+	private static List<Button> bufferBotoes = new ArrayList<Button>();
 
 	private static List<String> palavrasEncontradasListPrimeiraColuna = new ArrayList<String>();
 	private static List<String> palavrasEncontradasListSegundaColuna = new ArrayList<String>();
@@ -43,6 +46,7 @@ public class JogoActivity extends Activity {
 	private EditText respostaEditText;
 	private Chronometer cronometro;
 	private ImageButton botaoSair;
+	private ImageButton botaoVoltar;
 	
 
 	private List<List<String>> palavras = new ArrayList<List<String>>();
@@ -50,8 +54,7 @@ public class JogoActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		limpaPalpites();
-		limpaPalavrasEncontradas();
+		limpaVariaveisDaClasse();
 		
 		Intent jogoIntent = getIntent();
 		Jogo jogo = carregaVariaveisDoJogador(jogoIntent);
@@ -65,6 +68,12 @@ public class JogoActivity extends Activity {
 
 		Button botaoEnviar = (Button) findViewById(R.id.botaoEnviar);
 		botaoEnviar.setOnClickListener(botaoEnviarListener());
+	}
+
+	private static void limpaVariaveisDaClasse() {
+		limpaPalpites();
+		limpaPalavrasEncontradas();
+		limpaBuffer();
 	}
 
 	private static void limpaPalpites() {
@@ -94,7 +103,6 @@ public class JogoActivity extends Activity {
 		
 		addOnClickListenerBotoes();
 		
-		
 		return layout;
 	}
 
@@ -112,6 +120,7 @@ public class JogoActivity extends Activity {
 			
 			public void onClick(View v) {
 				meusPalpites += letra;
+				bufferBotoes.add(botaoLetra);
 				respostaEditText.setText(meusPalpites);
 				botaoLetra.setVisibility(Button.INVISIBLE);
 			}
@@ -144,8 +153,6 @@ public class JogoActivity extends Activity {
 							+ jogoAtual.getNomeJogador() + "\n Pontuação: "
 							+ jogoAtual.getPontuacao() + "\n Tempo: "
 							+ cronometro.getText(), alertaFimListener(usuario));
-		} else {
-			apresentaBotoesPalavra();
 		}
 	}
 
@@ -182,12 +189,13 @@ public class JogoActivity extends Activity {
 					jogoAtual.checarPalavra(resposta);
 
 					TextView acertoColuna1 = (TextView) findViewById(R.id.acertosColuna1);
+					acertoColuna1.setTextSize(15);
 					TextView acertoColuna2 = (TextView) findViewById(R.id.acertosColuna2);
-
+					acertoColuna2.setTextSize(15);
+					
 					atualizaVariaveisDoJogo();
 
-					mostraPalavrasTela(resposta, acertoColuna1, acertoColuna2,
-							null);
+					mostraPalavrasTela(resposta, acertoColuna1, acertoColuna2);
 
 					verificaFimDoJogo();
 
@@ -197,27 +205,26 @@ public class JogoActivity extends Activity {
 
 					mostraDialog("Esta não é uma palavra listada!",
 							alertaListener());
-					apresentaBotoesPalavra();
 
 				} catch (PalavraJaEncontradaException pe) {
 					mostraDialog("Esta palavra já foi encontrada!",
 							alertaListener());
-					apresentaBotoesPalavra();
 
 				} finally {
 					atualizaPontuacao();
+					apresentaBotoesPalavra();
+					limpaBuffer();
 				}
 			}
 
 			private void mostraPalavrasTela(String resposta,
-					TextView acertoColuna1, TextView acertoColuna2,
-					TextView acertoColuna3) {
+					TextView acertoColuna1, TextView acertoColuna2) {
 				if (primeiraListaVazia()) {
 					palavrasEncontradasListPrimeiraColuna.add(resposta);
 				} else {
 					palavrasEncontradasListSegundaColuna.add(resposta);
 				} 
-				mostraPalavras(acertoColuna1, acertoColuna2, acertoColuna3);
+				mostraPalavras(acertoColuna1, acertoColuna2);
 			}
 
 			private boolean primeiraListaVazia() {
@@ -225,9 +232,12 @@ public class JogoActivity extends Activity {
 			}
 		};
 	}
+	
+	private static void limpaBuffer() {
+		bufferBotoes = new ArrayList<Button>();
+	}
 
-	private void mostraPalavras(TextView acertoColuna1, TextView acertoColuna2,
-			TextView acertoColuna3) {
+	private void mostraPalavras(TextView acertoColuna1, TextView acertoColuna2) {
 
 		acertoColuna1
 				.setText(mostraPalavrasEncontradas(palavrasEncontradasListPrimeiraColuna));
@@ -241,6 +251,7 @@ public class JogoActivity extends Activity {
 
 	private static CharSequence mostraPalavrasEncontradas(List<String> palavras) {
 		String palavrasEncontradas = "";
+		
 		for (String palavra : palavras) {
 			palavrasEncontradas += "\n- " + palavra;
 		}
@@ -248,6 +259,9 @@ public class JogoActivity extends Activity {
 	}
 
 	private void carregaVariaveisDoJogo() {
+		
+		botaoVoltar = (ImageButton) findViewById(R.id.imageBotaoVoltar);
+		botaoVoltar.setOnClickListener(botaoVoltarListener());
 		
 		botaoSair = (ImageButton) findViewById(R.id.imageBotaoSair);
 		botaoSair.setOnClickListener(botaoSairListener());
@@ -265,6 +279,19 @@ public class JogoActivity extends Activity {
 		cronometro.start();
 
 		atualizaVariaveisDoJogo();
+	}
+
+	private OnClickListener botaoVoltarListener() {
+		return new OnClickListener() {
+			
+			public void onClick(View v) {
+				if (!meusPalpites.equals("")) {
+					setMeusPalpites(meusPalpites.substring(0, meusPalpites.length() - 1));
+					respostaEditText.setText(meusPalpites);
+					bufferBotoes.remove(bufferBotoes.size() - 1).setVisibility(Button.VISIBLE);
+				}
+			}
+		};
 	}
 
 
@@ -359,6 +386,10 @@ public class JogoActivity extends Activity {
 
 	public void setPalavras(List<List<String>> palavras) {
 		this.palavras = palavras;
+	}
+	
+	public static void setMeusPalpites(String meusPalpites) {
+		JogoActivity.meusPalpites = meusPalpites;
 	}
 
 }
