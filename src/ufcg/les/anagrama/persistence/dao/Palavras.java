@@ -1,9 +1,11 @@
 package ufcg.les.anagrama.persistence.dao;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Palavras {
+public class Palavras implements Serializable{
 	
+	private static final long serialVersionUID = 1359788216720090824L;
 	private long id;
 	private String anagramas;
 	private List<String> palavras;

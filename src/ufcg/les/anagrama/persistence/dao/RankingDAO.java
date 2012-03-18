@@ -14,11 +14,10 @@ public class RankingDAO implements Serializable {
 	
 	public RankingDAO() {
 		listUsuario = new ArrayList<Usuario>();
-		carregaRanking();
 	}
 	
-	public void carregaRanking() {
-		listUsuario	= carregaRankingDefault(); // TODO Resgatar do banco de dados
+	public void carregaRanking(List<Usuario> usuarios) {
+		listUsuario = usuarios;
 		Collections.sort(listUsuario);
 	}
 	
@@ -29,8 +28,11 @@ public class RankingDAO implements Serializable {
 	public boolean addUsuario(Usuario usuario) {
 		listUsuario.add(usuario);
 		Collections.sort(listUsuario);
-		
-		return listUsuario.contains(usuario);
+		if(listUsuario.size() < 5) {
+			return listUsuario.contains(usuario);
+		} else {
+			return listUsuario.subList(0, 4).contains(usuario);
+		}
 	}
 	
 	public String toString() {

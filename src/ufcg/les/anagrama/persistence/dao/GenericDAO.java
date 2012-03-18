@@ -7,6 +7,8 @@ public interface GenericDAO<T> {
 	
 	public void inserirObjeto(String obj);
 	
+	public void inserirObjeto(String obj, int obj2, long obj3);
+	
 	public void  deletarObjeto(Long idObj);
 	
 	public List<T> listarObjetos();

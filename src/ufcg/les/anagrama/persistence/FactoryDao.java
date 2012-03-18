@@ -1,5 +1,6 @@
 package ufcg.les.anagrama.persistence;
 
+import android.content.Context;
 import ufcg.les.anagrama.persistence.dao.RankingDAO;
 
 public class FactoryDao {
