@@ -252,9 +252,10 @@ public class PalavrasDAO extends GenericDAOImpl<Palavras> {
 	public boolean isBdPopulated() {
 		Cursor cursor = bancoDeDados.query(GenericDAOSQLiteHelper.TABELA_PALAVRAS,
 				todasAsPalavras, null, null, null, null, null);
-		
-		if(cursor.getCount() > 0) {
-			return true;
+		if(cursor != null) {
+			if(cursor.getCount() > 0) {
+				return true;
+			}
 		}
 		return false;
 	}
