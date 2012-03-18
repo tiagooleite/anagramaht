@@ -254,6 +254,7 @@ public class PalavrasDAO extends GenericDAOImpl<Palavras> {
 				todasAsPalavras, null, null, null, null, null);
 		if(cursor != null) {
 			if(cursor.getCount() > 0) {
+				cursor.close();
 				return true;
 			}
 		}

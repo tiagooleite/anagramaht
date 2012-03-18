@@ -81,5 +81,17 @@ public class UsuarioDAO extends GenericDAOImpl<Usuario> {
 		bd.execSQL("DROP TABLE IF EXISTS " + GenericDAOSQLiteHelper.TABELA_USUARIOS);
 		bd.execSQL(GenericDAOSQLiteHelper.CREATE_DB_USUARIOS);
 	}
+	
+	public boolean isBdPopulated() {
+		Cursor cursor = bancoDeDados.query(GenericDAOSQLiteHelper.TABELA_USUARIOS,
+				todasOsUsuarios, null, null, null, null, null);
+		if(cursor != null) {
+			if(cursor.getCount() > 0) {
+				cursor.close();
+				return true;
+			}
+		}
+		return false;
+	}
 
 }
