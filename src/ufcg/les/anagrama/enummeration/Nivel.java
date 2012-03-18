@@ -1,6 +1,8 @@
 package ufcg.les.anagrama.enummeration;
 
-public enum Nivel {
+import java.io.Serializable;
+
+public enum Nivel implements Serializable {
 
 	FACIL, NORMAL, DIFICIL;
 

@@ -1,5 +1,6 @@
 package ufcg.les.anagrama.model;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +16,17 @@ import ufcg.les.anagrama.persistence.dao.PalavrasDAO;
 import ufcg.les.anagrama.util.ContabilizaPontos;
 import ufcg.les.anagrama.util.GeradorStrings;
 
-public class Jogo {
+public class Jogo implements Serializable {
 	
+	private static final long serialVersionUID = -5011731639297651726L;
+
 	private static final String LOGS = "logs";
 	
 	private static final int PONTO = 50;
 	private static final int PALAVRA_ENCONTRADA = 40;
 	private static final int PALAVRA_INEXISTENTE = 20;
+	
+	private static List<Integer> listaPosicoesJaUsadas;
 	
 	private String nomeJogador;
 	private int pontuacao;
@@ -34,6 +39,7 @@ public class Jogo {
 	private List<String> anagramasEncontrados;
 	
 	public Jogo(String nomeJogador, Nivel nivel, Context contexto) {
+		listaPosicoesJaUsadas = new ArrayList<Integer>();
 		setNivel(nivel);
 		setNomeJogador(nomeJogador);
 		carregarPalavras(contexto);
@@ -155,9 +161,36 @@ public class Jogo {
 		
 		Random gerador = new Random();
 		int tamanhoAleatorio = gerador.nextInt(tamanho);
-		Log.v(LOGS, "Tamanho Aleatorio => " + String.valueOf(tamanhoAleatorio));
 		
-		return palavrasPorNivel.get(tamanhoAleatorio);		
+		while (tamanho != 0) {
+			if (!listaPosicoesJaUsadas.contains(tamanhoAleatorio)) {
+				listaPosicoesJaUsadas.add(tamanhoAleatorio);
+				System.out.println("LISTA POSICOES JA USADAS = " + listaPosicoesJaUsadas.size());
+				return palavrasPorNivel.get(tamanhoAleatorio);
+			}
+			tamanho--;
+		}
+		
+		mudaNivel();
+		
+		if (nivel == null) {
+			//TODO FIM DE JOGO
+			return null;
+		}
+		
+		return getListaAnagramasAleatoria(
+				palavrasDAO.getPalavrasPorNivel(getNivel()));
+	}
+
+	private void mudaNivel() {
+		if(nivel.equals(Nivel.FACIL)) {
+			setNivel(Nivel.NORMAL);
+		} else if (nivel.equals(Nivel.NORMAL)) {
+			setNivel(Nivel.DIFICIL);
+		} else {
+			setNivel(null);
+		}
+		
 	}
 
 	public Long getTempo() {

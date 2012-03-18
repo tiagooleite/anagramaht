@@ -1,5 +1,6 @@
 package ufcg.les.anagrama.persistence.dao;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,18 +12,19 @@ import android.content.Context;
 import ufcg.les.anagrama.enummeration.Nivel;
 import ufcg.les.anagrama.exceptions.TamanhoDaPalavraInvalidoException;
 
-public class PalavrasDAO extends GenericDAOImpl {
+public class PalavrasDAO extends GenericDAOImpl implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3089532068956852382L;
 	private Map<Nivel, List<List<String>>> palavrasPorNivel;
 	
-	//Nova maneira de amarmazenar as palavras
-	private Map<String, List<String>> anagramaasCorrespondentesFacil;
 	
 	// ---------------------------------------
 	
 	public PalavrasDAO(Context contexto) {
 		super(contexto);
-		anagramaasCorrespondentesFacil = new HashMap<String, List<String>>();
 		palavrasPorNivel = new HashMap<Nivel, List<List<String>>>();
 		//carregarPalavras();
 		
@@ -31,42 +33,42 @@ public class PalavrasDAO extends GenericDAOImpl {
 	}
 
 	//NIVEL FACIL PARA A NOVA IMPLEMENTACAO
-	private void carregaPalavras() {
-		carregaPalavrasFacil();
-		carregaPalavrasNormal();
-	}
+//	private void carregaPalavras() {
+//		carregaPalavrasFacil();
+//		carregaPalavrasNormal();
+//	}
 
-	private void carregaPalavrasNormal() {
-		String palavra = "trapo";
-		List<String> listaFacil = new ArrayList<String>();
-		listaFacil.add("trapo");
-		listaFacil.add("tropa");
-		listaFacil.add("parto");
-		listaFacil.add("porta");
-		listaFacil.add("rapto");
-		listaFacil.add("topar");
-		listaFacil.add("prato");
-		listaFacil.add("optar");
-		listaFacil.add("rato");
-		listaFacil.add("ato");
-		listaFacil.add("pato");
-		listaFacil.add("topa");
-		
-		anagramaasCorrespondentesFacil.put(palavra, listaFacil);
-		
-	}
-
-	private void carregaPalavrasFacil() {
-		String palavra = "rato";
-		List<String> listaFacil = new ArrayList<String>();
-		listaFacil.add("rota");
-		listaFacil.add("ato");
-		listaFacil.add("tora");
-		listaFacil.add("toar");
-		listaFacil.add("rato");
-		
-		anagramaasCorrespondentesFacil.put(palavra, listaFacil);
-	}
+//	private void carregaPalavrasNormal() {
+//		String palavra = "trapo";
+//		List<String> listaFacil = new ArrayList<String>();
+//		listaFacil.add("trapo");
+//		listaFacil.add("tropa");
+//		listaFacil.add("parto");
+//		listaFacil.add("porta");
+//		listaFacil.add("rapto");
+//		listaFacil.add("topar");
+//		listaFacil.add("prato");
+//		listaFacil.add("optar");
+//		listaFacil.add("rato");
+//		listaFacil.add("ato");
+//		listaFacil.add("pato");
+//		listaFacil.add("topa");
+//		
+//		anagramaasCorrespondentesFacil.put(palavra, listaFacil);
+//		
+//	}
+//
+//	private void carregaPalavrasFacil() {
+//		String palavra = "rato";
+//		List<String> listaFacil = new ArrayList<String>();
+//		listaFacil.add("rota");
+//		listaFacil.add("ato");
+//		listaFacil.add("tora");
+//		listaFacil.add("toar");
+//		listaFacil.add("rato");
+//		
+//		anagramaasCorrespondentesFacil.put(palavra, listaFacil);
+//	}
 
 	public List<List<String>> getPalavrasPorNivel(Nivel nivel) {
 		return palavrasPorNivel.get(nivel);

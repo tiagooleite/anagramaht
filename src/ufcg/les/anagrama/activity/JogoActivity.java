@@ -318,12 +318,6 @@ public class JogoActivity extends Activity {
 						"\n\n Pontuação atual: " + jogoAtual.getPontuacao() +
 						"\n Tempo total: " + cronometro.getText(),
 						alertaFimListener(usuario));
-				
-//				Intent fimIntent = new Intent(JogoActivity.this,
-//						AnagramaHTActivity.class);
-//				
-//				startActivity(fimIntent);
-//				finish();
 			}
 		};
 	}
