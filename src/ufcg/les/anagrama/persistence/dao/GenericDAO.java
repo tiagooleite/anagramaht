@@ -1,15 +1,23 @@
 package ufcg.les.anagrama.persistence.dao;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface GenericDAO<T> {
 	
-	public void inserirObjeto(T obj);
+	public void inserirObjeto(String obj);
 	
 	public void  deletarObjeto(Long idObj);
 	
 	public List<T> listarObjetos();
 	
 	public void atualizarObjeto(Long idObj);
-
+	
+	public void open() throws SQLException;
+	
+	public void close();
+	
+	public void inserirListaDeStrings(List<String> obj);
+	
+	public void limpar();
 }

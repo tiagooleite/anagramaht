@@ -1,10 +1,12 @@
 package ufcg.les.anagrama.activity;
 
 import java.io.Serializable;
+import java.sql.SQLException;
 
 import ufcg.les.anagrama.R;
 import ufcg.les.anagrama.enummeration.Nivel;
 import ufcg.les.anagrama.persistence.FactoryDao;
+import ufcg.les.anagrama.persistence.dao.PalavrasDAO;
 import ufcg.les.anagrama.persistence.dao.RankingDAO;
 import ufcg.les.anagrama.persistence.dao.Usuario;
 import android.app.Activity;
@@ -19,6 +21,7 @@ public class AnagramaHTActivity extends Activity implements Serializable {
 	private static final long serialVersionUID = -5308668553694718836L;
 	
 	private RankingDAO rankingDAO = FactoryDao.getRankingDaoInstance();
+	private PalavrasDAO palavrasDAO = new PalavrasDAO(this);
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,8 @@ public class AnagramaHTActivity extends Activity implements Serializable {
         botaoOpcoesAction();
         botaoAjudaAction();
         botaoSairAction();
+        
+        criaBancoDeDados();
     }
     
     @Override
@@ -142,5 +147,16 @@ public class AnagramaHTActivity extends Activity implements Serializable {
 		};
 	}
 	
-	
+	private void criaBancoDeDados() {
+		try {
+			palavrasDAO.open();
+			palavrasDAO.limpar();
+			palavrasDAO.criarPalavras();
+		} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		}
+		
+		palavrasDAO.close();
+	}
 }

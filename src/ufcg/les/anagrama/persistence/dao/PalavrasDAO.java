@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+
+import android.content.Context;
 
 import ufcg.les.anagrama.enummeration.Nivel;
+import ufcg.les.anagrama.exceptions.TamanhoDaPalavraInvalidoException;
 
-public class PalavrasDAO extends GenericDAOImpl<String> {
+public class PalavrasDAO extends GenericDAOImpl {
 	
 	private Map<Nivel, List<List<String>>> palavrasPorNivel;
 	
@@ -16,12 +20,14 @@ public class PalavrasDAO extends GenericDAOImpl<String> {
 	
 	// ---------------------------------------
 	
-	public PalavrasDAO() {
+	public PalavrasDAO(Context contexto) {
+		super(contexto);
 		anagramaasCorrespondentesFacil = new HashMap<String, List<String>>();
 		palavrasPorNivel = new HashMap<Nivel, List<List<String>>>();
-		carregarPalavras();
+		//carregarPalavras();
+		
 		//nova implementação
-		carregaPalavras(); 
+		//carregaPalavras(); 
 	}
 
 	//NIVEL FACIL PARA A NOVA IMPLEMENTACAO
@@ -74,10 +80,43 @@ public class PalavrasDAO extends GenericDAOImpl<String> {
 		this.palavrasPorNivel = palavrasPorNivel;
 	}
 	
-	private void carregarPalavras() {
+	public void carregarPalavras() {
+		List<Palavras> palavras = listarObjetos();
+		
 		List<List<String>> listaFacil = new ArrayList<List<String>>();
 		List<List<String>> listaNormal = new ArrayList<List<String>>();
 		List<List<String>> listaDificil = new ArrayList<List<String>>();
+		
+		while (!palavras.isEmpty()) {
+			int posicao = getPosicaoAleatoria(palavras);
+			Palavras palavra = palavras.remove(posicao);
+			
+			if(palavra.getTamanhoDaPalavra() >= 3 && palavra.getTamanhoDaPalavra() <= 4) {
+				listaFacil.add(palavra.getPalavras());
+			} else if (palavra.getTamanhoDaPalavra() >= 5 && palavra.getTamanhoDaPalavra() <= 6) {
+				listaNormal.add(palavra.getPalavras());
+			} else if (palavra.getTamanhoDaPalavra() >= 7) {
+				listaDificil.add(palavra.getPalavras());
+			} else {
+				throw new TamanhoDaPalavraInvalidoException(palavra.getTamanhoDaPalavra());
+			}
+				
+		}
+		
+		palavrasPorNivel.put(Nivel.FACIL, listaFacil); // 3 e 4 letras
+		palavrasPorNivel.put(Nivel.NORMAL, listaNormal); // 5 e 6 letras
+		palavrasPorNivel.put(Nivel.DIFICIL, listaDificil); // >= 7 letras
+	}
+	
+	private int getPosicaoAleatoria(List<Palavras> palavras) {
+		int tamanho = palavras.size();
+		Random gerador = new Random();
+		int posicao = gerador.nextInt(tamanho);
+		
+		return posicao;
+	}
+	
+	public void criarPalavras() {
 		
 		ArrayList<String> anagramasAmor = carregaAnagramaAmor();
 		ArrayList<String> anagramasRato = carregaAnagramaRato();
@@ -94,24 +133,18 @@ public class PalavrasDAO extends GenericDAOImpl<String> {
 		ArrayList<String> anagramasRasteira = carregaAnagramaRasteira();
 		ArrayList<String> anagramasEstragar = carregaAnagramaEstragar();
 		
-		listaFacil.add(anagramasAmor);
-		listaFacil.add(anagramasRato);
-		listaFacil.add(anagramasFio);
-		
-		listaNormal.add(anagramasPrato);
-		listaNormal.add(anagramasMorto);
-		listaNormal.add(anagramasOlhar);
-		listaNormal.add(anagramasBolero);
-		listaNormal.add(anagramasRancor);
-		listaNormal.add(anagramasSacar);
-		
-		listaDificil.add(anagramasGerador);
-		listaDificil.add(anagramasRasteira);
-		listaDificil.add(anagramasEstragar);
-		
-		palavrasPorNivel.put(Nivel.FACIL, listaFacil); // 3 e 4 letras
-		palavrasPorNivel.put(Nivel.NORMAL, listaNormal); // 5 e 6 letras
-		palavrasPorNivel.put(Nivel.DIFICIL, listaDificil); // >= 7 letras
+		inserirListaDeStrings(anagramasAmor);
+		inserirListaDeStrings(anagramasRato);
+		inserirListaDeStrings(anagramasFio);
+		inserirListaDeStrings(anagramasPrato);
+		inserirListaDeStrings(anagramasMorto);
+		inserirListaDeStrings(anagramasOlhar);
+		inserirListaDeStrings(anagramasBolero);
+		inserirListaDeStrings(anagramasRancor);
+		inserirListaDeStrings(anagramasSacar);
+		inserirListaDeStrings(anagramasGerador);
+		inserirListaDeStrings(anagramasRasteira);
+		inserirListaDeStrings(anagramasEstragar);
 	}
 	
 	private ArrayList<String> carregaAnagramaGerador() {

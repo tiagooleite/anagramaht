@@ -1,9 +1,11 @@
 package ufcg.les.anagrama.model;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import android.content.Context;
 import android.util.Log;
 
 import ufcg.les.anagrama.enummeration.Nivel;
@@ -31,10 +33,10 @@ public class Jogo {
 	private List<String> anagramas;
 	private List<String> anagramasEncontrados;
 	
-	public Jogo(String nomeJogador, Nivel nivel) {
+	public Jogo(String nomeJogador, Nivel nivel, Context contexto) {
 		setNivel(nivel);
 		setNomeJogador(nomeJogador);
-		this.palavrasDAO = new PalavrasDAO();
+		carregarPalavras(contexto);
 		this.anagramas = new ArrayList<String>();
 	}
 
@@ -164,5 +166,19 @@ public class Jogo {
 
 	public void setTempo(Long tempo) {
 		this.tempo = tempo;
+	}
+	
+	private void carregarPalavras(Context contexto) {
+		if(this.palavrasDAO == null) {
+			this.palavrasDAO = new PalavrasDAO(contexto);
+		}
+		try {
+			this.palavrasDAO.open();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.palavrasDAO.carregarPalavras();
+		this.palavrasDAO.close();
 	}
 }
