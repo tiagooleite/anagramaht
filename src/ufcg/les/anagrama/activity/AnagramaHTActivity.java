@@ -9,6 +9,7 @@ import ufcg.les.anagrama.persistence.FactoryDao;
 import ufcg.les.anagrama.persistence.dao.PalavrasDAO;
 import ufcg.les.anagrama.persistence.dao.RankingDAO;
 import ufcg.les.anagrama.persistence.dao.Usuario;
+import ufcg.les.anagrama.persistence.dao.UsuarioDAO;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ public class AnagramaHTActivity extends Activity implements Serializable {
 	private static final long serialVersionUID = -5308668553694718836L;
 	
 	private RankingDAO rankingDAO = FactoryDao.getRankingDaoInstance();
+	private UsuarioDAO usuarioDAO = new UsuarioDAO(this);
 	private PalavrasDAO palavrasDAO = new PalavrasDAO(this);
 	
     @Override
@@ -31,6 +33,7 @@ public class AnagramaHTActivity extends Activity implements Serializable {
         Intent nivelIntent = getIntent();
         Nivel nivel = (Nivel) nivelIntent.getSerializableExtra("nivel");
         
+        
         botaoJogarAction(nivel);
         botaoRankingAction(rankingDAO);
         botaoOpcoesAction();
@@ -38,6 +41,7 @@ public class AnagramaHTActivity extends Activity implements Serializable {
         botaoSairAction();
         
         criaBancoDeDados();
+        
     }
     
     @Override
@@ -48,7 +52,17 @@ public class AnagramaHTActivity extends Activity implements Serializable {
         Usuario usuario = (Usuario) usuarioIntent.getSerializableExtra("usuario");
         
         if (usuario != null) {
-        	rankingDAO.addUsuario(usuario);
+        	if(rankingDAO.addUsuario(usuario)) {
+        		try {
+    				usuarioDAO.open();
+    				usuarioDAO.inserirObjeto(usuario.getNome(), usuario.getPontucao(),
+    						usuario.getTempo());
+    			} catch (SQLException e) {
+    				// TODO Auto-generated catch block
+    				e.printStackTrace();
+    			}
+    			usuarioDAO.close();
+        	}
         }
     }
     
@@ -150,7 +164,7 @@ public class AnagramaHTActivity extends Activity implements Serializable {
 	private void criaBancoDeDados() {
 		try {
 			palavrasDAO.open();
-			palavrasDAO.limpar();
+			//palavrasDAO.limpar();
 			palavrasDAO.criarPalavras();
 		} catch (SQLException e) {
 				// TODO Auto-generated catch block

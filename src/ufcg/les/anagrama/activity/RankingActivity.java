@@ -1,10 +1,14 @@
 package ufcg.les.anagrama.activity;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import ufcg.les.anagrama.R;
 import ufcg.les.anagrama.persistence.dao.RankingDAO;
 import ufcg.les.anagrama.persistence.dao.Usuario;
+import ufcg.les.anagrama.persistence.dao.UsuarioDAO;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +19,7 @@ import android.widget.TextView;
 
 public class RankingActivity extends Activity {
 	
+	UsuarioDAO usuariosDAO = new UsuarioDAO(this);
 	private List<Usuario> listaUsuarios;
 	
 	@Override
@@ -26,37 +31,56 @@ public class RankingActivity extends Activity {
 
         RankingDAO rankingDao = (RankingDAO) usuarioIntent.getSerializableExtra("rankingDao");
         
-        listaUsuarios = rankingDao.getRanking();
+        //listaUsuarios = rankingDao.getRanking();
 		
+        carregarUsuarios();
+        rankingDao.carregaRanking(listaUsuarios);
 		carregaRanking();
 		
 		Button botaoVoltar = (Button) findViewById(R.id.voltarRanking);
 		botaoVoltar.setOnClickListener(botaoVoltarListener());
+		
+		//carregarUsuarios();
+	}
+	
+	private void carregarUsuarios() {
+		try {
+			usuariosDAO.open();
+			listaUsuarios = usuariosDAO.listarObjetos();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		usuariosDAO.close();
 	}
 
 	private void carregaRanking() {
 		int totalUsuariosNoRanking = listaUsuarios.size();
-
+		List<TextView> textViewRankingList = new ArrayList<TextView>();
+		
 		TextView primeiroTextView = (TextView) findViewById(R.id.primeiro);
-		primeiroTextView.setText("1- "
-				+ listaUsuarios.get(totalUsuariosNoRanking - 1).toString());
-
+		textViewRankingList.add(primeiroTextView);
+		
 		TextView segundoTextView = (TextView) findViewById(R.id.segundo);
-		segundoTextView.setText("2- "
-				+ listaUsuarios.get(totalUsuariosNoRanking - 2).toString());
+		textViewRankingList.add(segundoTextView);
 
 		TextView terceiroTextView = (TextView) findViewById(R.id.terceiro);
-		terceiroTextView.setText("3- "
-				+ listaUsuarios.get(totalUsuariosNoRanking - 3).toString());
+		textViewRankingList.add(terceiroTextView);
 
 		TextView quartoTextView = (TextView) findViewById(R.id.quarto);
-		quartoTextView.setText("4- "
-				+ listaUsuarios.get(totalUsuariosNoRanking - 4).toString());
+		textViewRankingList.add(quartoTextView);
 
 		TextView quintoTextView = (TextView) findViewById(R.id.quinto);
-		quintoTextView.setText("5- "
-				+ listaUsuarios.get(totalUsuariosNoRanking - 5).toString());
-
+		textViewRankingList.add(quintoTextView);
+		
+		Iterator<TextView> itTextView = textViewRankingList.iterator();
+		
+		int count = 0;
+		while(itTextView.hasNext() && count < totalUsuariosNoRanking) {
+			itTextView.next().setText(count+1 + " - "
+					+ listaUsuarios.get(count).toString());
+			count++;
+		}
 	}
 
 	private OnClickListener botaoVoltarListener() {

@@ -7,6 +7,7 @@ public class Usuario implements Comparable<Usuario>, Serializable {
 	private static final long serialVersionUID = -6252383088422660695L;
 	
 	private String nome;
+	private long id;
 	private int pontuacao;
 	private long tempo;
 	private static final long TEMPO_DEFAULT = 0;
@@ -56,5 +57,9 @@ public class Usuario implements Comparable<Usuario>, Serializable {
 	@Override
 	public String toString() {
 		return  this.nome + " ----- "+ this.pontuacao + " pontos";
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 }

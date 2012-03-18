@@ -1,18 +1,27 @@
 package ufcg.les.anagrama.persistence.dao;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 
 import ufcg.les.anagrama.enummeration.Nivel;
 import ufcg.les.anagrama.exceptions.TamanhoDaPalavraInvalidoException;
 
-public class PalavrasDAO extends GenericDAOImpl {
+public class PalavrasDAO extends GenericDAOImpl<Palavras> {
 	
+	protected String[] todasAsPalavras = { GenericDAOSQLiteHelper.COLUNA_ID,
+			GenericDAOSQLiteHelper.COLUNA_PALAVRAS };
 	private Map<Nivel, List<List<String>>> palavrasPorNivel;
 	
 	//Nova maneira de amarmazenar as palavras
@@ -23,17 +32,7 @@ public class PalavrasDAO extends GenericDAOImpl {
 	public PalavrasDAO(Context contexto) {
 		super(contexto);
 		anagramaasCorrespondentesFacil = new HashMap<String, List<String>>();
-		palavrasPorNivel = new HashMap<Nivel, List<List<String>>>();
-		//carregarPalavras();
-		
-		//nova implementação
-		//carregaPalavras(); 
-	}
-
-	//NIVEL FACIL PARA A NOVA IMPLEMENTACAO
-	private void carregaPalavras() {
-		carregaPalavrasFacil();
-		carregaPalavrasNormal();
+		palavrasPorNivel = new HashMap<Nivel, List<List<String>>>(); 
 	}
 
 	private void carregaPalavrasNormal() {
@@ -243,5 +242,86 @@ public class PalavrasDAO extends GenericDAOImpl {
 		anagramasFio.add("fio");
 		anagramasFio.add("foi");
 		return anagramasFio;
+	}
+	
+	public void inserirListaDeStrings(List<String> obj) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(baos);
+		for (String element : obj) {
+		    try {
+				out.writeUTF(element);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		byte[] bytes = baos.toByteArray();
+
+		ContentValues values = new ContentValues();
+		values.put(GenericDAOSQLiteHelper.COLUNA_PALAVRAS, bytes);
+		bancoDeDados.insert(GenericDAOSQLiteHelper.TABELA_PALAVRAS, null, values);
+	}
+
+	public void deletarObjeto(Long idObj) {
+		bancoDeDados.delete(GenericDAOSQLiteHelper.TABELA_PALAVRAS, GenericDAOSQLiteHelper.COLUNA_ID
+				+ " = " + idObj, null);
+	}
+
+	public List<Palavras> listarObjetos() {
+		List<Palavras> palavras = new ArrayList<Palavras>();
+		
+		Cursor cursor = bancoDeDados.query(GenericDAOSQLiteHelper.TABELA_PALAVRAS,
+				todasAsPalavras, null, null, null, null, null);
+		
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			Palavras palavra = cursorParaPalavra(cursor);
+			palavras.add(palavra);
+			cursor.moveToNext();
+		}
+		
+		cursor.close();
+		return palavras;
+	}
+
+	public void atualizarObjeto(Long idObj) {
+		// TODO Auto-generated method stub
+	}
+	
+	private Palavras cursorParaPalavra(Cursor cursor) {
+		Palavras palavras = new Palavras();
+		
+		palavras.setId(cursor.getLong(0));
+		
+		byte[] bytes = cursor.getBlob(1);
+		palavras.setPalavras(getListaDePalavras(bytes));
+		
+		return palavras;
+	}
+
+	private List<String> getListaDePalavras(byte[] bytes) {
+		List<String> palavras = new ArrayList<String>();
+		ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+		DataInputStream in = new DataInputStream(bais);
+		
+		try {
+			while (in.available() > 0) {
+			    String element = in.readUTF();
+			    palavras.add(element);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return palavras;
+	}
+
+	public void inserirObjeto(String obj) {
+		// TODO Auto-generated method stub
+	}
+
+	public void inserirObjeto(String obj, int obj2, long obj3) {
+		// TODO Auto-generated method stub
+		
 	}
 }
