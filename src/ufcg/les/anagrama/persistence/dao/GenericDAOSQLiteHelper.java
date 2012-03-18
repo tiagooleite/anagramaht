@@ -18,12 +18,12 @@ public class GenericDAOSQLiteHelper extends SQLiteOpenHelper {
 	private static final String NOME_BD = "anagramaht.db";
 	private static final int VERSAO_DB = 1;
 
-	private static final String CREATE_DB_PALAVRAS = "create table "
+	public static final String CREATE_DB_PALAVRAS = "create table "
 			+ TABELA_PALAVRAS + "( " + COLUNA_ID
 			+ " integer primary key autoincrement, " + COLUNA_PALAVRAS
 			+ " BLOB);";
 	
-	private static final String CREATE_DB_USUARIOS = "create table "
+	public static final String CREATE_DB_USUARIOS = "create table "
 			+ TABELA_USUARIOS + "( " + COLUNA_ID
 			+ " integer primary key autoincrement, " + COLUNA_USUARIOS
 			+ " text not null, " + COLUNA_PONTUACAO + " text not null, "+ COLUNA_TEMPO + 

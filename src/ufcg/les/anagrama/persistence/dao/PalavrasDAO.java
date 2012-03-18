@@ -11,12 +11,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import ufcg.les.anagrama.enummeration.Nivel;
+import ufcg.les.anagrama.exceptions.TamanhoDaPalavraInvalidoException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-
-import ufcg.les.anagrama.enummeration.Nivel;
-import ufcg.les.anagrama.exceptions.TamanhoDaPalavraInvalidoException;
+import android.database.sqlite.SQLiteDatabase;
 
 public class PalavrasDAO extends GenericDAOImpl<Palavras> {
 	
@@ -24,47 +24,12 @@ public class PalavrasDAO extends GenericDAOImpl<Palavras> {
 			GenericDAOSQLiteHelper.COLUNA_PALAVRAS };
 	private Map<Nivel, List<List<String>>> palavrasPorNivel;
 	
-	//Nova maneira de amarmazenar as palavras
-	private Map<String, List<String>> anagramaasCorrespondentesFacil;
 	
 	// ---------------------------------------
 	
 	public PalavrasDAO(Context contexto) {
 		super(contexto);
-		anagramaasCorrespondentesFacil = new HashMap<String, List<String>>();
 		palavrasPorNivel = new HashMap<Nivel, List<List<String>>>(); 
-	}
-
-	private void carregaPalavrasNormal() {
-		String palavra = "trapo";
-		List<String> listaFacil = new ArrayList<String>();
-		listaFacil.add("trapo");
-		listaFacil.add("tropa");
-		listaFacil.add("parto");
-		listaFacil.add("porta");
-		listaFacil.add("rapto");
-		listaFacil.add("topar");
-		listaFacil.add("prato");
-		listaFacil.add("optar");
-		listaFacil.add("rato");
-		listaFacil.add("ato");
-		listaFacil.add("pato");
-		listaFacil.add("topa");
-		
-		anagramaasCorrespondentesFacil.put(palavra, listaFacil);
-		
-	}
-
-	private void carregaPalavrasFacil() {
-		String palavra = "rato";
-		List<String> listaFacil = new ArrayList<String>();
-		listaFacil.add("rota");
-		listaFacil.add("ato");
-		listaFacil.add("tora");
-		listaFacil.add("toar");
-		listaFacil.add("rato");
-		
-		anagramaasCorrespondentesFacil.put(palavra, listaFacil);
 	}
 
 	public List<List<String>> getPalavrasPorNivel(Nivel nivel) {
@@ -333,5 +298,12 @@ public class PalavrasDAO extends GenericDAOImpl<Palavras> {
 	public void inserirObjeto(String obj, int obj2, long obj3) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public void limpar() {
+		SQLiteDatabase bd = bdHelper.getWritableDatabase();
+		bd.execSQL("DROP TABLE IF EXISTS " + GenericDAOSQLiteHelper.TABELA_PALAVRAS);
+		bd.execSQL(GenericDAOSQLiteHelper.CREATE_DB_PALAVRAS);
 	}
 }
