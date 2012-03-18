@@ -69,6 +69,14 @@
         android:text="@string/enviar" />
     
      <ImageButton
+        android:id="@+id/imageBotaoVoltar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="250dp"
+        android:contentDescription="@string/sair"
+        android:src="@drawable/seta" />
+    
+     <ImageButton
         android:id="@+id/imageBotaoSair"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
