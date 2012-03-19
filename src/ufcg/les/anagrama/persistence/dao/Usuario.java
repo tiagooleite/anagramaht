@@ -51,7 +51,7 @@ public class Usuario implements Comparable<Usuario>, Serializable {
 			return (int) (this.getTempo() - usuario.getTempo());
 		} 
 		
-		return this.getPontucao() - usuario.getPontucao(); 
+		return usuario.getPontucao() - this.getPontucao(); 
 	}
 	
 	@Override
