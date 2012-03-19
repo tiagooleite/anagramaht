@@ -258,6 +258,7 @@ public class PalavrasDAO extends GenericDAOImpl<Palavras> {
 				return true;
 			}
 		}
+		
 		return false;
 	}
 

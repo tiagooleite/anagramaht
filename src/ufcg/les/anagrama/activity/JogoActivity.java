@@ -30,8 +30,8 @@ public class JogoActivity extends Activity {
 	public static int palavrasRestantes;
 	public static final String VAZIO = "";
 	//no pc eh 55 no cel eh 30
-	private static final int TAMANHO_CAIXINHA = 55; //setar para 30 quando for passar para o celular
-	private static final float TAMANHO_LETRA = 15; //comenta isso quando for passar para o celular
+	private static final int TAMANHO_CAIXINHA = 30; //setar para 30 quando for passar para o celular
+	//private static final float TAMANHO_LETRA = 15; //comenta isso quando for passar para o celular
 	private static String meusPalpites = "";
 	
 
@@ -94,7 +94,7 @@ public class JogoActivity extends Activity {
 		for (int i = 1; i < splitPalavraEmb.length; i++) {
 			Button botaoLetra = new Button(this);
 			botaoLetra.setText(splitPalavraEmb[i]);
-			botaoLetra.setTextSize(TAMANHO_LETRA);
+			//botaoLetra.setTextSize(TAMANHO_LETRA);
 			botaoLetra.setLayoutParams(new TableRow.
 					LayoutParams(TAMANHO_CAIXINHA, TAMANHO_CAIXINHA));
 			
