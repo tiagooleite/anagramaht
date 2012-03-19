@@ -130,6 +130,14 @@ public class PalavrasDAO extends GenericDAOImpl<Palavras> {
 		ArrayList<String> anagramasRasteira = new ArrayList<String>();
 		anagramasRasteira.add("estragar");
 		anagramasRasteira.add("resgatar");
+		anagramasRasteira.add("gata");
+		anagramasRasteira.add("tragar");
+		anagramasRasteira.add("reatar");
+		anagramasRasteira.add("atar");
+		anagramasRasteira.add("seta");
+		anagramasRasteira.add("ser");
+		anagramasRasteira.add("ter");
+		anagramasRasteira.add("estar");
 		return anagramasRasteira;
 	}
 	
@@ -137,6 +145,8 @@ public class PalavrasDAO extends GenericDAOImpl<Palavras> {
 		ArrayList<String> anagramasMorto = new ArrayList<String>();
 		anagramasMorto.add("morto");
 		anagramasMorto.add("motor");
+		anagramasMorto.add("moto");
+		anagramasMorto.add("tom");
 		return anagramasMorto;
 	}
 	
@@ -145,6 +155,8 @@ public class PalavrasDAO extends GenericDAOImpl<Palavras> {
 		anagramasMorto.add("sacar");
 		anagramasMorto.add("casar");
 		anagramasMorto.add("sacra");
+		anagramasMorto.add("cara");
+		anagramasMorto.add("caras");
 		return anagramasMorto;
 	}
 	
@@ -152,6 +164,9 @@ public class PalavrasDAO extends GenericDAOImpl<Palavras> {
 		ArrayList<String> anagramasBolero = new ArrayList<String>();
 		anagramasBolero.add("rebolo");
 		anagramasBolero.add("bolero");
+		anagramasBolero.add("bolo");
+		anagramasBolero.add("rolo");
+		anagramasBolero.add("role");
 		return anagramasBolero;
 	}
 	
@@ -159,6 +174,10 @@ public class PalavrasDAO extends GenericDAOImpl<Palavras> {
 		ArrayList<String> anagramasBolero = new ArrayList<String>();
 		anagramasBolero.add("rancor");
 		anagramasBolero.add("roncar");
+		anagramasBolero.add("onca");
+		anagramasBolero.add("carro");
+		anagramasBolero.add("corra");
+		anagramasBolero.add("cor");
 		return anagramasBolero;
 	}
 	
@@ -167,6 +186,10 @@ public class PalavrasDAO extends GenericDAOImpl<Palavras> {
 		anagramasOlhar.add("olhar");
 		anagramasOlhar.add("ralho");
 		anagramasOlhar.add("rolha");
+		anagramasOlhar.add("olha");
+		anagramasOlhar.add("ola");
+		anagramasOlhar.add("alo");
+		anagramasOlhar.add("ralo");
 		return anagramasOlhar;
 	}
 
@@ -180,6 +203,8 @@ public class PalavrasDAO extends GenericDAOImpl<Palavras> {
 		anagramasPrato.add("topar");
 		anagramasPrato.add("prato");
 		anagramasPrato.add("optar");
+		anagramasPrato.add("ato");
+		anagramasPrato.add("pato");
 		return anagramasPrato;
 	}
 
@@ -189,6 +214,7 @@ public class PalavrasDAO extends GenericDAOImpl<Palavras> {
 		anagramasAmor.add("roma");
 		anagramasAmor.add("mora");
 		anagramasAmor.add("ramo");
+		anagramasAmor.add("amo");
 		return anagramasAmor;
 	}
 	
@@ -199,6 +225,7 @@ public class PalavrasDAO extends GenericDAOImpl<Palavras> {
 		anagramasRato.add("toar");
 		anagramasRato.add("tora");
 		anagramasRato.add("ator");
+		anagramasRato.add("ato");
 		return anagramasRato;
 	}
 	
@@ -206,6 +233,7 @@ public class PalavrasDAO extends GenericDAOImpl<Palavras> {
 		ArrayList<String> anagramasFio = new ArrayList<String>();
 		anagramasFio.add("fio");
 		anagramasFio.add("foi");
+		anagramasFio.add("oi");
 		return anagramasFio;
 	}
 	

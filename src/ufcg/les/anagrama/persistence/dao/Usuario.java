@@ -56,8 +56,15 @@ public class Usuario implements Comparable<Usuario>, Serializable {
 	
 	@Override
 	public String toString() {
-		return  this.nome + " ----- "+ this.pontuacao + " pontos";
+		return  this.nome + " --- "+ this.pontuacao + " pontos";
+			//	+ " --- Tempo: " + converteLongParaString();
 	}
+	
+//	public String converteLongParaString() {
+//		Chronometer cronomentro = new Chronometer(null);
+//		cronomentro.setBase(tempo);
+//		return (String) cronomentro.getText();
+//	}
 
 	public void setId(long id) {
 		this.id = id;

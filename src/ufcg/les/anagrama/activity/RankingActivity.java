@@ -77,9 +77,9 @@ public class RankingActivity extends Activity {
 		
 		int count = 0;
 		while(itTextView.hasNext() && count < totalUsuariosNoRanking) {
-			itTextView.next().setText(count+1 + " - "
-					+ listaUsuarios.get(count).toString());
 			count++;
+			itTextView.next().setText(count + " - "
+					+ listaUsuarios.get(totalUsuariosNoRanking - count).toString());
 		}
 	}
 
