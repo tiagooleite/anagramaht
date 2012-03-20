@@ -30,8 +30,8 @@ public class JogoActivity extends Activity {
 	public static int palavrasRestantes;
 	public static final String VAZIO = "";
 	//no pc eh 55 no cel eh 30
-	private static final int TAMANHO_CAIXINHA = 55; //setar para 30 quando for passar para o celular
-	private static final float TAMANHO_LETRA = 15; //comenta isso quando for passar para o celular
+	private static final int TAMANHO_CAIXINHA = 30; //setar para 30 quando for passar para o celular
+	//private static final float TAMANHO_LETRA = 15; //comenta isso quando for passar para o celular
 	private static String meusPalpites = "";
 	
 
@@ -44,10 +44,12 @@ public class JogoActivity extends Activity {
 	private Jogo jogoAtual;
 
 	private TextView pontuacaoTextView;
+	private TextView palavrasRestantesTextView;
 	private EditText respostaEditText;
 	private Chronometer cronometro;
 	private ImageButton botaoSair;
 	private ImageButton botaoVoltar;
+	private Button botaoEnviar;
 	
 
 	private List<List<String>> palavras = new ArrayList<List<String>>();
@@ -66,8 +68,9 @@ public class JogoActivity extends Activity {
         setContentView(layout);
 		
 		carregaVariaveisDoJogo();
+		
 
-		Button botaoEnviar = (Button) findViewById(R.id.botaoEnviar);
+		botaoEnviar = (Button) findViewById(R.id.botaoEnviar);
 		botaoEnviar.setOnClickListener(botaoEnviarListener());
 	}
 
@@ -90,11 +93,11 @@ public class JogoActivity extends Activity {
 				R.layout.page_jogo, null);
 		LinearLayout vTblRow = (LinearLayout)layout.
 				findViewById(R.id.groupCaixinhas);
-		
+
 		for (int i = 1; i < splitPalavraEmb.length; i++) {
 			Button botaoLetra = new Button(this);
 			botaoLetra.setText(splitPalavraEmb[i]);
-			botaoLetra.setTextSize(TAMANHO_LETRA);
+			//botaoLetra.setTextSize(TAMANHO_LETRA);
 			botaoLetra.setLayoutParams(new TableRow.
 					LayoutParams(TAMANHO_CAIXINHA, TAMANHO_CAIXINHA));
 			
@@ -146,18 +149,22 @@ public class JogoActivity extends Activity {
 
 	private void verificaFimDoJogo() {
 		if (palavrasRestantes == 0) {
+			atualizaVariaveisFimDeJogo("Parabéns. Fim de jogo!");
 			
-			salvaTempo();
-			Usuario usuario = criaUsuario();
-
-			mostraDialog(
-					"FIM DE JOGO" + "\n\n Parabéns: "
-							+ jogoAtual.getNomeJogador() + "\n Pontuação: "
-							+ jogoAtual.getPontuacao() + "\n Tempo: "
-							+ cronometro.getText(), alertaFimListener(usuario));
 		} else {
 			apresentaBotoesPalavra();
 		}
+	}
+
+	private void setTextFimDeJogo(String msg) {
+		palavrasRestantesTextView.setText("Falta: " + palavrasRestantes
+				+ " palavra" + "    " + msg);
+	}
+
+	private void desabilitaBotoes() {
+		botaoEnviar.setVisibility(Button.INVISIBLE);
+		botaoVoltar.setVisibility(Button.INVISIBLE);
+		respostaEditText.setEnabled(false);
 	}
 
 	private Usuario criaUsuario() {
@@ -303,6 +310,28 @@ public class JogoActivity extends Activity {
 		};
 	}
 	
+	private DialogInterface.OnClickListener listenerShare(Usuario usuario) {
+		return new DialogInterface.OnClickListener() {
+
+			private void shareIt() {
+				Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+				sharingIntent.setType("text/plain");
+				String shareBody = "Fiz " + jogoAtual.getPontuacao()
+						+ " pontos no @AnagramaHT !"
+						+ "\nTente você também!! =P";
+				sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
+						"Subject Here");
+				sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT,
+						shareBody);
+				startActivity(Intent.createChooser(sharingIntent, "Share via"));
+			}
+
+			public void onClick(DialogInterface dialog, int which) {
+				shareIt();
+			}
+		};
+	}
+	
 	public void limpaBotoesPalavras() {
 		for (Button botao : listaBotoesPalavras) {
 			botao.setVisibility(Button.INVISIBLE);
@@ -314,16 +343,24 @@ public class JogoActivity extends Activity {
 		return new OnClickListener() {
 			
 			public void onClick(View v) {
-				salvaTempo();
-				limpaBotoesPalavras();
-				Usuario usuario = criaUsuario();
-				paraCronometro();
-				mostraDialog("Você está desistindo!" +
-						"\n\n Pontuação atual: " + jogoAtual.getPontuacao() +
-						"\n Tempo total: " + cronometro.getText(),
-						alertaFimListener(usuario));
+				atualizaVariaveisFimDeJogo("Você desistiu. Fim de jogo!");
 			}
+
+			
 		};
+	}
+	
+	private void atualizaVariaveisFimDeJogo(String msg) {
+		salvaTempo();
+		limpaBotoesPalavras();
+		desabilitaBotoes();
+		setTextFimDeJogo(msg);
+		Usuario usuario = criaUsuario();
+		mostraDialogSairJogo("FIM DE JOGO" + "\n\n Parabéns: "
+				+ jogoAtual.getNomeJogador() + "\n Pontuação: "
+				+ jogoAtual.getPontuacao() + "\n Tempo: "
+				+ cronometro.getText(),
+				alertaFimListener(usuario), listenerShare(usuario));
 	}
 
 	private void atualizaVariaveisDoJogo() {
@@ -337,7 +374,7 @@ public class JogoActivity extends Activity {
 	private void atualizaPalavrasRestantes() {
 		palavrasRestantes = jogoAtual.totalPalavrasRestantes();
 
-		TextView palavrasRestantesTextView = (TextView)
+		palavrasRestantesTextView = (TextView)
 				findViewById(R.id.textViewPalavrasRestantes);
 		if (palavrasRestantes > 1) {
 			palavrasRestantesTextView.setText("Faltam: " + palavrasRestantes
@@ -359,6 +396,18 @@ public class JogoActivity extends Activity {
 		alerta.setButton("Ok", listener);
 		alerta.show();
 	}
+	
+	private void mostraDialogSairJogo(String msg,
+			DialogInterface.OnClickListener listener,
+			DialogInterface.OnClickListener listenerButton2) {
+		AlertDialog alerta = new AlertDialog.Builder(JogoActivity.this)
+				.create();
+		alerta.setMessage(msg);
+		alerta.setButton2("Share", listenerButton2);
+		alerta.setButton("Ok", listener);
+		alerta.show();
+	}
+	
 
 	private DialogInterface.OnClickListener alertaFimListener(
 			final Usuario usuario) {
@@ -369,16 +418,18 @@ public class JogoActivity extends Activity {
 				mudaContexto(usuario);
 			}
 
-			//TODO Tentativa quando existia o bd em memoria
 			private void mudaContexto(Usuario usuario) {
-				Intent fimIntent = new Intent(JogoActivity.this,
-						AnagramaHTActivity.class);
-				fimIntent.putExtra("usuario", usuario);
-				startActivity(fimIntent);
-				finish();
-
+				sairDoJogo(usuario);
 			}
 		};
+	}
+	
+	private void sairDoJogo(Usuario usuario) {
+		Intent fimIntent = new Intent(JogoActivity.this,
+				AnagramaHTActivity.class);
+		fimIntent.putExtra("usuario", usuario);
+		startActivity(fimIntent);
+		finish();
 	}
 
 	private DialogInterface.OnClickListener alertaListener() {

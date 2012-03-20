@@ -38,12 +38,13 @@ public final class R {
         public static final int seta=0x7f020018;
         public static final int t=0x7f020019;
         public static final int tela_inicial=0x7f02001a;
-        public static final int u=0x7f02001b;
-        public static final int v=0x7f02001c;
-        public static final int w=0x7f02001d;
-        public static final int x=0x7f02001e;
-        public static final int y=0x7f02001f;
-        public static final int z=0x7f020020;
+        public static final int twitter=0x7f02001b;
+        public static final int u=0x7f02001c;
+        public static final int v=0x7f02001d;
+        public static final int w=0x7f02001e;
+        public static final int x=0x7f02001f;
+        public static final int y=0x7f020020;
+        public static final int z=0x7f020021;
     }
     public static final class id {
         public static final int acertosColuna1=0x7f050013;

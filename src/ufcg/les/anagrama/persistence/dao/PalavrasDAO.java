@@ -215,6 +215,7 @@ public class PalavrasDAO extends GenericDAOImpl<Palavras> {
 		anagramasAmor.add("mora");
 		anagramasAmor.add("ramo");
 		anagramasAmor.add("amo");
+		anagramasAmor.add("mar");
 		return anagramasAmor;
 	}
 	
@@ -226,6 +227,7 @@ public class PalavrasDAO extends GenericDAOImpl<Palavras> {
 		anagramasRato.add("tora");
 		anagramasRato.add("ator");
 		anagramasRato.add("ato");
+		anagramasRato.add("orta");
 		return anagramasRato;
 	}
 	

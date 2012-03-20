@@ -2,17 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ufcg.les.anagrama"
     android:versionCode="1"
+    android:screenOrientation = "landscape"
     android:versionName="1.0" >
     <uses-sdk android:minSdkVersion="8" />
     
+    <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="false" />
+    
     <!-- <uses-permission android:name="android.permission.INTERNET"></uses-permission>  -->
     
-    <supports-screens
-        android:anyDensity="true"
-        android:largeScreens="false"
-        android:normalScreens="true"
-        android:resizeable="true"
-        android:smallScreens="false" />
 
     <application
         android:icon="@drawable/ic_launcher"
