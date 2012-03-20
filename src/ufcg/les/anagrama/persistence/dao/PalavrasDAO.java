@@ -116,6 +116,13 @@ public class PalavrasDAO extends GenericDAOImpl<Palavras> {
 		anagramasGerador.add("gerador");
 		anagramasGerador.add("regador");
 		anagramasGerador.add("regrado");
+		anagramasGerador.add("gado");
+		anagramasGerador.add("rega");
+		anagramasGerador.add("gera");
+		anagramasGerador.add("regado");
+		anagramasGerador.add("gerado");
+		anagramasGerador.add("gerador");
+		anagramasGerador.add("dor");
 		return anagramasGerador;
 	}
 	
@@ -156,6 +163,7 @@ public class PalavrasDAO extends GenericDAOImpl<Palavras> {
 		anagramasMorto.add("casar");
 		anagramasMorto.add("sacra");
 		anagramasMorto.add("cara");
+		anagramasMorto.add("casa");
 		anagramasMorto.add("caras");
 		return anagramasMorto;
 	}

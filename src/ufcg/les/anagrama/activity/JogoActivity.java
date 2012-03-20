@@ -30,8 +30,8 @@ public class JogoActivity extends Activity {
 	public static int palavrasRestantes;
 	public static final String VAZIO = "";
 	//no pc eh 55 no cel eh 30
-	private static final int TAMANHO_CAIXINHA = 30; //setar para 30 quando for passar para o celular
-	//private static final float TAMANHO_LETRA = 15; //comenta isso quando for passar para o celular
+	private static final int TAMANHO_CAIXINHA = 55; //setar para 30 quando for passar para o celular
+	private static final float TAMANHO_LETRA = 15; //comenta isso quando for passar para o celular
 	private static String meusPalpites = "";
 	
 
@@ -97,7 +97,7 @@ public class JogoActivity extends Activity {
 		for (int i = 1; i < splitPalavraEmb.length; i++) {
 			Button botaoLetra = new Button(this);
 			botaoLetra.setText(splitPalavraEmb[i]);
-			//botaoLetra.setTextSize(TAMANHO_LETRA);
+			botaoLetra.setTextSize(TAMANHO_LETRA);
 			botaoLetra.setLayoutParams(new TableRow.
 					LayoutParams(TAMANHO_CAIXINHA, TAMANHO_CAIXINHA));
 			
@@ -157,8 +157,7 @@ public class JogoActivity extends Activity {
 	}
 
 	private void setTextFimDeJogo(String msg) {
-		palavrasRestantesTextView.setText("Falta: " + palavrasRestantes
-				+ " palavra" + "    " + msg);
+		palavrasRestantesTextView.setText(msg);
 	}
 
 	private void desabilitaBotoes() {
@@ -281,6 +280,7 @@ public class JogoActivity extends Activity {
 		
 		botaoSair = (ImageButton) findViewById(R.id.imageBotaoSair);
 		botaoSair.setOnClickListener(botaoSairListener());
+		//botaoSair.setBackgroundResource(R.drawable.fechar);
 
 		pontuacaoTextView = (TextView) findViewById(R.id.textViewPontuacao);
 		pontuacaoTextView.setVisibility(TextView.VISIBLE);
@@ -318,7 +318,7 @@ public class JogoActivity extends Activity {
 				sharingIntent.setType("text/plain");
 				String shareBody = "Fiz " + jogoAtual.getPontuacao()
 						+ " pontos no @AnagramaHT !"
-						+ "\nTente você também!! =P";
+						+ "\nTente você também!!";
 				sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
 						"Subject Here");
 				sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT,
@@ -343,7 +343,11 @@ public class JogoActivity extends Activity {
 		return new OnClickListener() {
 			
 			public void onClick(View v) {
-				atualizaVariaveisFimDeJogo("Você desistiu. Fim de jogo!");
+				if (palavrasRestantes == 0) {
+					atualizaVariaveisFimDeJogo("Fim de jogo!");
+				} else {
+					atualizaVariaveisFimDeJogo("Você desistiu. Fim de jogo!");
+				}
 			}
 
 			
